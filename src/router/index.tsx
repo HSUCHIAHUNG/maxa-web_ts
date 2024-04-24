@@ -3,8 +3,8 @@ import DefaultLayout from "../layout/DefaultLayout";
 import { lazy, Suspense } from "react";
 
 
-const HomePage = lazy(() => import("../components/Home.tsx"));
-const ErrorPage = lazy(() => import("../components/Error.tsx"));
+const HomePage = lazy(() => import("@/pages/Home.tsx"));
+const ErrorPage = lazy(() => import("@/pages/Error.tsx"));
 
 
 const router = createBrowserRouter([

@@ -7,7 +7,9 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    colors: {
+      mainorange: '#0F1C31'
+    },
   },
   plugins: [
     addDynamicIconSelectors(),
