@@ -10,6 +10,10 @@ export default {
     colors: {
       mainorange: '#0F1C31'
     },
+    screens: {
+      'xl': '1200px',
+      'md': '768px',
+    }
   },
   plugins: [
     addDynamicIconSelectors(),

@@ -8,10 +8,10 @@ interface CarouseProps {
 const Carousel:React.FC<CarouseProps> = (props) => {
     const { text, subtitle } = props;
     return (
-      <div className=' flex gap-[12px] items-center pb-[18px]'>
-        <p className=' text-[20px] '>{text}</p>
-        <div className='h-[16px] border-r border-solid border-[#E5E6EB]'></div>
-        <p className=' text-[14px] text-[#86909C] '>{subtitle}</p>
+      <div className=' w-[100%] flex gap-[12px] justify-center items-center pb-[18px] md:justify-normal'>
+        <p className=' text-center text-[20px] '>{text}</p>
+        <div className='h-[16px] border-r border-solid border-[#E5E6EB] hidden md:block'></div>
+        <p className=' text-[14px] text-[#86909C] hidden md:block '>{subtitle}</p>
       </div>
     );
   }

@@ -12,6 +12,7 @@ const Carousel:React.FC<CarouseProps> = (props) => {
       <div style={style} className={className}>
         <img
           src={src}
+          className='w-[100%] h-[100%]'
           style={{ width: '100%', objectFit: 'cover' }}
           alt='Banner'
         />

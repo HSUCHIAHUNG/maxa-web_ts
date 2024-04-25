@@ -11,7 +11,7 @@ const Carousel: React.FC<CityProps> = (props) => {
   const { url, title } = props;
 
   return (
-    <div className=" relative w-[100%] h-[130px] md:max-w-[214px] md:h-[300px]">
+    <div className=" relative h-[130px] md:w-[134px] md:h-[200px] xl:w-[214px] xl:h-[300px]">
       <img
         src={url}
         alt={title}
@@ -25,4 +25,4 @@ const Carousel: React.FC<CityProps> = (props) => {
   );
 };
 
-export default Carousel;
+export default Carousel; 
