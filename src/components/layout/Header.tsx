@@ -1,10 +1,19 @@
-import React from "react";
+// 原生方法
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Input, Menu } from "@arco-design/web-react";
-import { useState } from "react";
+// Icon
 import headerText from "@/assets/images/header/header_text.svg";
 import memberIcon from "@/assets/images/header/memberAvatar.svg";
+import guestIcon from "@/assets/images/header/guest.svg";
+// redux
+import { useSelector } from "react-redux";
+import { authActions } from "../../stores/auth.ts";
+import { useAppDispatch, RootState } from "../../stores/index.ts";
+import { NavLink } from "react-router-dom";
 
-interface isOpenType {
+// 選單開關狀態型別
+interface IsOpenType {
   search: boolean;
   list: boolean;
   memberList: boolean;
@@ -13,7 +22,15 @@ interface isOpenType {
 }
 
 const Header: React.FC = () => {
-  const [isOpen, setOpen] = useState({
+  const dispatch = useAppDispatch();
+  const isDialog = () => {
+    dispatch(authActions.isDialog());
+  };
+  /** @func 全域狀態auth */
+  const auth = useSelector((state: RootState) => state.auth.isMember);
+
+  // 選單開關狀態控制
+  const [isOpen, setOpen] = useState<IsOpenType>({
     search: false,
     list: false,
     memberList: false,
@@ -22,51 +39,64 @@ const Header: React.FC = () => {
   });
   const { search, list, memberList, langue, cart } = isOpen;
 
-  // ui kit
+  /** @func 當前路由方法 */
+  const location = useLocation();
+  /** @const {string} 當前路由path */
+  const currentPathName = location.pathname;
+
+  // ui ki
   const InputSearch = Input.Search;
   const MenuItem = Menu.Item;
   const SubMenu = Menu.SubMenu;
 
-  const toggleOpen = (key: keyof isOpenType) => {
-    setOpen((prev: isOpenType) => ({
+  /** @const {Array} 未登入 */
+  // const menuList = [
+  //   { id: 2, lable: "購物車", route: "/cart" },
+  //   { id: 3, lable: "訂單查詢", route: "/memberOrder" },
+  // ];
+
+  /** @const {Array} 會員登入nav */
+  const memberMenu = [
+    { id: 1, lable: "帳號管理", route: "memberPage/account" },
+    { id: 2, lable: "訂單管理", route: "memberPage/guestOrder" },
+    { id: 3, lable: "常用旅客", route: "memberPage/FrequentTravelers" },
+    { id: 4, lable: "登出", route: "memberPage/logout" },
+  ];
+
+  /** @func 會員選單icon動態顯示icon */
+  const getIconClassName = (lable: string) => {
+    switch (lable) {
+      case "帳號管理":
+        return "solar--cart-large-minimalistic-bold-duotone";
+      case "訂單管理":
+        return "solar--clipboard-text-bold-duotone";
+      case "常用旅客":
+        return "solar--user-id-bold-duotone";
+      case "登出":
+        return "solar--logout-3-bold-duotone";
+      default:
+        return "";
+    }
+  };
+
+  /** @func 選單開關狀態控制方法 */
+  const toggleOpen = (key: keyof IsOpenType) => {
+    if (isOpen.memberList && key !== "memberList") toggleOpen("memberList");
+    if (isOpen.list && key !== "list") toggleOpen("list");
+    if (isOpen.cart && key !== "cart") toggleOpen("cart");
+    if (isOpen.langue && key !== "langue") toggleOpen("langue");
+    if (isOpen.search && key !== "search") toggleOpen("search");
+
+    setOpen((prev: IsOpenType) => ({
       ...prev,
       [key]: !prev[key],
     }));
   };
 
-  const changeSearch = () => {
-    if (isOpen.memberList) toggleOpen("memberList");
-    if (isOpen.list) toggleOpen("list");
-    toggleOpen("search");
-  };
-
-  const changeList = () => {
-    if (isOpen.memberList) toggleOpen("memberList");
-    toggleOpen("list");
-  };
-
-  const changeLangueList = () => {
-    if (isOpen.memberList) toggleOpen("memberList");
-    if (isOpen.cart) toggleOpen("cart");
-
-    toggleOpen("langue");
-  };
-
-  const changeMemberList = () => {
-    if (isOpen.list) toggleOpen("list");
-    if (isOpen.langue) toggleOpen("langue");
-    if (isOpen.cart) toggleOpen("cart");
-    toggleOpen("memberList");
-  };
-
-  const changeCartList = () => {
-    if (isOpen.memberList) toggleOpen("memberList");
-    if (isOpen.langue) toggleOpen("langue");
-    toggleOpen("cart");
-  };
   return (
     <>
       <section className="relative bg-[#fff] w-[100%] h-[56px] py-[14px] px-[12px] md:pl-[20px] md:pr-[32px] flex justify-between items-center">
+        {/* 左邊maxa logo */}
         <div className={`flex gap-[4px] items-center ${search && "hidden"}`}>
           <span className="icon-[solar--box-minimalistic-bold-duotone] w-[24px] h-[24px] text-[#4E5969]"></span>
           <img src={headerText} alt="MAXA" className="w-[66px] h-[14px]" />
@@ -76,15 +106,15 @@ const Header: React.FC = () => {
           />
         </div>
 
-        {/* 手機版 */}
+        {/* 右邊選單按鈕 */}
         <div className={`flex gap-[24px] ${search && "hidden"}`}>
           <span
-            onClick={changeSearch}
+            onClick={() => toggleOpen("search")}
             className={`icon-[solar--magnifer-bold-duotone] md:hidden w-[24px] h-[24px] text-[#4E5969] cursor-pointer hover:text-[#3A57E8] ${
               search && "hidden"
             }`}
           ></span>
-          <div onClick={changeList} className="md:hidden group">
+          <div onClick={() => toggleOpen("list")} className={`md:hidden group`}>
             <span
               className={`icon-[solar--hamburger-menu-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer ${
                 list && "text-[#3A57E8]"
@@ -96,7 +126,10 @@ const Header: React.FC = () => {
               }`}
             ></div>
           </div>
-          <div onClick={changeLangueList} className=" group hidden md:block ">
+          <div
+            onClick={() => toggleOpen("langue")}
+            className=" group hidden md:block "
+          >
             <span className="icon-[solar--earth-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer group-hover:text-[#3A57E8]"></span>
             <div
               className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] ${
@@ -104,7 +137,10 @@ const Header: React.FC = () => {
               }`}
             ></div>
           </div>
-          <div onClick={changeCartList} className={`group hidden md:block `}>
+          <div
+            onClick={() => toggleOpen("cart")}
+            className={`group hidden md:block `}
+          >
             <span
               className={`icon-[solar--cart-large-minimalistic-bold-duotone] w-[24px] h-[24px] cursor-pointer text-[#4E5969] group-hover:text-[#3A57E8]`}
             ></span>
@@ -114,9 +150,11 @@ const Header: React.FC = () => {
               }`}
             ></div>
           </div>
-          <div onClick={changeMemberList}>
+          <div
+            onClick={auth ? () => toggleOpen("memberList") : () => isDialog()}
+          >
             <img
-              src={memberIcon}
+              src={auth ? memberIcon : guestIcon}
               alt="會員"
               className={` w-[24px] h-[24px] cursor-pointer ${
                 list && "text-[#3A57E8]"
@@ -136,7 +174,7 @@ const Header: React.FC = () => {
           }`}
         >
           <span
-            onClick={changeSearch}
+            onClick={() => toggleOpen("search")}
             className={`icon-[solar--arrow-left-outline] w-[24px] h-[24px] text-[#4E5969]`}
           ></span>
           <InputSearch
@@ -208,42 +246,41 @@ const Header: React.FC = () => {
         </Menu>
       </div>
       {/* 手機版會員選單 */}
-      <div
-        className={`menu-demo ${
+      <ul
+        className={`${
           memberList ? "block" : "hidden"
-        } absolute z-[999] w-[100%] md:w-[20%] top-[56px] md:top-[60px] md:right-[20px]`}
+        } absolute z-[999] w-[100%] md:w-[20%] top-[56px] md:top-[60px] md:right-[20px] bg-[#fff] px-[8px] py-[4px]`}
       >
-        <Menu
-          className={` `}
-          // defaultOpenKeys={["25"]}
-          // defaultSelectedKeys={["0_1"]}
-        >
-          <MenuItem key="25" className={`group`}>
-            <div className=" flex items-center gap-[16px]">
-              <span className="icon-[solar--cart-large-minimalistic-bold-duotone] w-[24px] h-[24px] cursor-pointer text-[#4E5969] group-hover:text-[#3A57E8]"></span>
-              <span>帳號管理</span>
+        {memberMenu.map((memberRoute) => (
+          <NavLink
+            to={memberRoute.route}
+            key={memberRoute.id}
+            className="group p-[9px] block"
+          >
+            <div className="flex items-center gap-[16px]">
+              <span
+                className={`icon-[${getIconClassName(
+                  memberRoute.lable
+                )}] w-[24px] h-[24px] cursor-pointer group-hover:text-[#3A57E8] ${
+                  currentPathName === `/${memberRoute.route}`
+                    ? "text-[#3A57E8]"
+                    : "text-[#4E5969]"
+                } `}
+              ></span>
+
+              <span
+                className={`group-hover:text-[#3A57E8] ${
+                  currentPathName === `/${memberRoute.route}`
+                    ? "text-[#3A57E8]"
+                    : "text-[#4E5969]"
+                }`}
+              >
+                {memberRoute.lable}
+              </span>
             </div>
-          </MenuItem>
-          <MenuItem key="26" className={`group`}>
-            <div className=" flex items-center gap-[16px]">
-              <span className="icon-[solar--clipboard-text-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer group-hover:text-[#3A57E8]"></span>
-              <span>訂單管理</span>
-            </div>
-          </MenuItem>
-          <MenuItem key="27" className={`group`}>
-            <div className=" flex items-center gap-[16px]">
-              <span className="icon-[solar--user-id-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer group-hover:text-[#3A57E8]"></span>
-              <span>常用旅客</span>
-            </div>
-          </MenuItem>
-          <MenuItem key="28" className={`group`}>
-            <div className=" flex items-center gap-[16px]">
-              <span className="icon-[solar--logout-3-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer group-hover:text-[#3A57E8]"></span>
-              <span>登出</span>
-            </div>
-          </MenuItem>
-        </Menu>
-      </div>
+          </NavLink>
+        ))}
+      </ul>
     </>
   );
 };
