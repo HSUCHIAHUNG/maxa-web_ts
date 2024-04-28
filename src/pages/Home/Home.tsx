@@ -1,6 +1,6 @@
 import { Carousel } from "@arco-design/web-react";
 // 匯入圖片
-import choseImg from "../assets/images/homePage/chose.svg";
+import choseImg from "@/assets/images/homePage/chose.svg";
 import tpeColor from "@/assets/images/homePage/Partner_color_1.svg";
 import tpeBlack from "@/assets/images/homePage/Partner_black_1.svg";
 import stateColor from "@/assets/images/homePage/Partner_color_2.svg";
@@ -9,13 +9,13 @@ import ubusColor from "@/assets/images/homePage/Partner_color_3.svg";
 import ubusBlack from "@/assets/images/homePage/Partner_black_3.svg";
 
 // 匯入組件
-import Banner from "../components/Carousel";
-import News from "../components/News";
-import Product from "../components/product";
-import PhotoTitle from "../components/PhotoTitle";
-import CityCard from "../components/City";
-import Chose from "../components/chose";
-import ParnerImg from "../components/ParnerImg";
+import Banner from "../../components/Carousel";
+import News from "../../components/common/News";
+import Product from "../../components/common/product";
+import PhotoTitle from "../../components/Home/PhotoTitle";
+import CityCard from "../../components/common/City";
+import Chose from "../../components/common/chose";
+import ParnerImg from "../../components/common/ParnerImg";
 
 function Home() {
   const imageSrc = [

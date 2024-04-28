@@ -23,8 +23,8 @@ interface IsOpenType {
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isDialog = () => {
-    dispatch(authActions.isDialog());
+  const dialogToggle = () => {
+    dispatch(authActions.dialogToggle());
   };
   /** @func 全域狀態auth */
   const auth = useSelector((state: RootState) => state.auth.isMember);
@@ -151,7 +151,7 @@ const Header: React.FC = () => {
             ></div>
           </div>
           <div
-            onClick={auth ? () => toggleOpen("memberList") : () => isDialog()}
+            onClick={auth ? () => toggleOpen("memberList") : () => dialogToggle()}
           >
             <img
               src={auth ? memberIcon : guestIcon}

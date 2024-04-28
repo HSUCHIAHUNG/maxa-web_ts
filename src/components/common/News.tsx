@@ -1,5 +1,5 @@
 import React from "react";
-import arrow from "@/assets/images/homePage/arrow.svg";
+import arrow from "../../assets/images/homePage/arrow.svg";
 
 interface NewsProps {
   url: string,

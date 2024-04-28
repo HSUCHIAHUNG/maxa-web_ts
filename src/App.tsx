@@ -1,6 +1,6 @@
 import { RouterProvider } from "react-router-dom";
 import router from "./router/index";
-import Guest from "./pages/Guest"
+import Guest from "./pages/Guest/Guest"
 
 function App() {
   return (

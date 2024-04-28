@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialCounterState = { isMember: false, isGuest:false };
+const initialCounterState = { isMember: false, isDialog:false };
 
 const authSlice = createSlice({
   name: "auth",
@@ -9,8 +9,8 @@ const authSlice = createSlice({
     isLogin(state) {
         state.isMember = !state.isMember;
     },
-    isDialog(state) {
-      state.isGuest = !state.isGuest
+    dialogToggle(state) {
+      state.isDialog = !state.isDialog
     }
   },
 });
