@@ -25,7 +25,7 @@ const Sigup: React.FC<signUpProps> = (props) => {
   const { countdown, resetTimer } = useCountdownTimer({
     duration: 5, // Duration in seconds
     onFinish: () => {
-      setModel("forgetTimerEnd");
+      setModel("signUpTimerEnd");
       resetTimer(); // Reset the timer when it finishes
     },
   });

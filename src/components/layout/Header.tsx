@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { authActions } from "../../stores/auth.ts";
 import { useAppDispatch, RootState } from "../../stores/index.ts";
 import { NavLink } from "react-router-dom";
+import IconButton from "../common/IconButton.tsx";
 
 // 選單開關狀態型別
 interface IsOpenType {
@@ -24,6 +25,14 @@ interface IsOpenType {
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const dialogToggle = () => {
+    setOpen((prevState) => ({
+      ...prevState,
+      search: false,
+      list: false,
+      memberList: false,
+      langue: false,
+      cart: false,
+    }));
     dispatch(authActions.dialogToggle());
   };
   /** @func 全域狀態auth */
@@ -50,10 +59,10 @@ const Header: React.FC = () => {
   const SubMenu = Menu.SubMenu;
 
   /** @const {Array} 未登入 */
-  // const menuList = [
-  //   { id: 2, lable: "購物車", route: "/cart" },
-  //   { id: 3, lable: "訂單查詢", route: "/memberOrder" },
-  // ];
+  const menuList = [
+    { id: "1", lable: "購物車", route: "/cart" },
+    { id: "2", lable: "訂單查詢", route: "/memberOrder" },
+  ];
 
   /** @const {Array} 會員登入nav */
   const memberMenu = [
@@ -97,61 +106,58 @@ const Header: React.FC = () => {
     <>
       <section className="relative bg-[#fff] w-[100%] h-[56px] py-[14px] px-[12px] md:pl-[20px] md:pr-[32px] flex justify-between items-center">
         {/* 左邊maxa logo */}
-        <div className={`flex gap-[4px] items-center ${search && "hidden"}`}>
+        <NavLink
+          to={"/"}
+          className={`flex gap-[4px] items-center ${search && "hidden"}`}
+        >
           <span className="icon-[solar--box-minimalistic-bold-duotone] w-[24px] h-[24px] text-[#4E5969]"></span>
           <img src={headerText} alt="MAXA" className="w-[66px] h-[14px]" />
           <InputSearch
             className={` w-[265px] h-[32px] hidden md:block `}
             placeholder="搜尋行程"
           />
-        </div>
+        </NavLink>
 
         {/* 右邊選單按鈕 */}
         <div className={`flex gap-[24px] ${search && "hidden"}`}>
+          {/* 手機版搜尋框按鈕 */}
           <span
             onClick={() => toggleOpen("search")}
             className={`icon-[solar--magnifer-bold-duotone] md:hidden w-[24px] h-[24px] text-[#4E5969] cursor-pointer hover:text-[#3A57E8] ${
               search && "hidden"
             }`}
           ></span>
-          <div onClick={() => toggleOpen("list")} className={`md:hidden group`}>
-            <span
-              className={`icon-[solar--hamburger-menu-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer ${
-                list && "text-[#3A57E8]"
-              }`}
-            ></span>
-            <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px]  ${
-                list ? "block" : "hidden"
-              }`}
-            ></div>
-          </div>
+          {/* 手機版選單按鈕 */}
+          <IconButton
+            toggleOpenFn={() => toggleOpen("list")}
+            isOpen={list}
+            className="md:hidden group"
+            icon="icon-[solar--hamburger-menu-bold-duotone]"
+          />
+          {/* 電腦版語言按鈕 */}
+          <IconButton
+            toggleOpenFn={() => toggleOpen("langue")}
+            isOpen={langue}
+            className=" group hidden md:block"
+            icon="icon-[solar--earth-bold-duotone]"
+          />
+          {/* 電腦版訂單查詢 */}
+          <span
+            className={`icon-[solar--clipboard-text-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer group-hover:text-[#3A57E8] hidden md:block`}
+          ></span>
+          {/* 電腦版購物車 */}
+          <IconButton
+            toggleOpenFn={() => toggleOpen("cart")}
+            isOpen={cart}
+            className=" group hidden md:block"
+            icon="icon-[solar--cart-large-minimalistic-bold-duotone]"
+          />
+          {/* 手機版會員選單 */}
           <div
-            onClick={() => toggleOpen("langue")}
-            className=" group hidden md:block "
-          >
-            <span className="icon-[solar--earth-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer group-hover:text-[#3A57E8]"></span>
-            <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] ${
-                langue ? "block" : "hidden"
-              }`}
-            ></div>
-          </div>
-          <div
-            onClick={() => toggleOpen("cart")}
-            className={`group hidden md:block `}
-          >
-            <span
-              className={`icon-[solar--cart-large-minimalistic-bold-duotone] w-[24px] h-[24px] cursor-pointer text-[#4E5969] group-hover:text-[#3A57E8]`}
-            ></span>
-            <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] ${
-                cart ? "block" : "hidden"
-              }`}
-            ></div>
-          </div>
-          <div
-            onClick={auth ? () => toggleOpen("memberList") : () => dialogToggle()}
+            onClick={
+              auth ? () => toggleOpen("memberList") : () => dialogToggle()
+            }
+            className={`${!auth ? "md:hidden" : "md:block"}`}
           >
             <img
               src={auth ? memberIcon : guestIcon}
@@ -166,12 +172,23 @@ const Header: React.FC = () => {
               }`}
             ></div>
           </div>
+          {/* 電腦版未登入選單 */}
+          <div
+            onClick={
+              auth ? () => toggleOpen("memberList") : () => dialogToggle()
+            }
+            className={`${
+              !auth ? "hidden md:block" : "hidden"
+            } w-[95px] h-[32px] rounded-[100px] bg-[#3A57E8] text-center leading-[32px] text-[#fff]`}
+          >
+            登入/註冊
+          </div>
         </div>
         {/* 手機版搜尋框 */}
         <div
           className={`w-[100%] flex justify-end items-center gap-[12px] ${
             search ? "block" : "hidden"
-          }`}
+          } `}
         >
           <span
             onClick={() => toggleOpen("search")}
@@ -210,27 +227,19 @@ const Header: React.FC = () => {
       <div
         className={`menu-demo ${
           list ? "block" : "hidden"
-        } absolute z-[999] w-[100%] top-[56px]`}
+        } absolute z-[999] w-[100%] top-[56px] md:hidden`}
       >
-        <Menu
-          style={{ width: "100%", height: "100%" }}
-          // defaultOpenKeys={["0"]}
-          // defaultSelectedKeys={["0_1"]}
-        >
-          <MenuItem key="a" className={`group`}>
-            <div className=" flex items-center gap-[16px]">
-              <span
-                className={`icon-[solar--cart-large-minimalistic-bold-duotone] w-[24px] h-[24px] cursor-pointer text-[#4E5969] group-hover:text-[#3A57E8]`}
-              ></span>
-              <span>購物車</span>
-            </div>
-          </MenuItem>
-          <MenuItem key="b" className={`group`}>
-            <div className=" flex items-center gap-[16px]">
-              <span className="icon-[solar--clipboard-text-bold-duotone] w-[24px] h-[24px] text-[#4E5969] cursor-pointer group-hover:text-[#3A57E8]"></span>
-              <span>訂單查詢</span>
-            </div>
-          </MenuItem>
+        <Menu style={{ width: "100%", height: "100%" }}>
+          {menuList.map((menuItem) => (
+            <MenuItem key={menuItem.id} className={`group`}>
+              <div className=" flex items-center gap-[16px]">
+                <span
+                  className={`icon-[solar--cart-large-minimalistic-bold-duotone] w-[24px] h-[24px] cursor-pointer text-[#4E5969] group-hover:text-[#3A57E8]`}
+                ></span>
+                <span>{menuItem.lable}</span>
+              </div>
+            </MenuItem>
+          ))}
           <SubMenu
             key="c"
             title={
