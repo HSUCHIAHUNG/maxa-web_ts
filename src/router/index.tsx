@@ -8,6 +8,8 @@ const ParnerPage = lazy(() => import("@/pages/Home/Parner"));
 const MemberPage = lazy(() => import("../layout/MemberLayout"));
 const AccountPage = lazy(() => import("../pages/Member/Account"));
 const EditPasswordPage = lazy(() => import("../pages/Guest/EditPassword"));
+const OrderPage = lazy(() => import("../pages/Order/Order"));
+
 
 const router = createBrowserRouter([
   {
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
           </Suspense>
         ),
         path: "/editPassword",
+      },
+      {
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <OrderPage />
+          </Suspense>
+        ),
+        path: "/order",
       },
     ],
   },

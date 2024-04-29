@@ -5,11 +5,12 @@ interface ProductProps {
   title: string;
   money: string;
   tag: string[];
+  className?: string
   // key: number
 }
 
 const Carousel: React.FC<ProductProps> = (props) => {
-  const { url, title, money, tag } = props;
+  const { url, title, money, tag, className } = props;
 
   // 動態生成 tag 的內聯樣式
   const getTagStyle = (tag: string) => {
@@ -32,7 +33,7 @@ const Carousel: React.FC<ProductProps> = (props) => {
   };
 
   return (
-    <div className=" border border-solid border-[#E5E6EB] rounded-[8px] w-[100%] h-[400px] md:w-[232px] xl:w-[370px] ">
+    <div className={`border border-solid border-[#E5E6EB] rounded-[8px] w-[100%] h-[400px] md:w-[232px] xl:w-[370px] ${className}`}>
       <img
         src={url}
         alt={title}

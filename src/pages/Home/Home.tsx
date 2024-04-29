@@ -151,7 +151,10 @@ function Home() {
 
   return (
     <div>
-      <Carousel className={`overflow-x-hidden max-w-[1920px] h-[320px] md:h-[500px] `} autoPlay={true}>
+      <Carousel
+        className={`overflow-x-hidden max-w-[1920px] h-[320px] md:h-[500px] `}
+        autoPlay={true}
+      >
         {imageSrc.map((src) => (
           <Banner key={src} src={src} />
         ))}
@@ -178,6 +181,7 @@ function Home() {
             <div className=" flex gap-[20px] flex-col md:flex-row ">
               {productList.map((productItem) => (
                 <Product
+                  className={`xl:w-[284px]}`}
                   key={productItem.id}
                   url={productItem.url}
                   title={productItem.title}
