@@ -1,10 +1,11 @@
 import React from "react";
 
 interface CheckboxProps {
-  content: string
+  SubMenu: string
+  className?: string
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ content }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ SubMenu, className }) => {
 
 
   return (
@@ -12,9 +13,9 @@ const Checkbox: React.FC<CheckboxProps> = ({ content }) => {
       <div className={`flex gap-[8px] border-b border-solid border-[#E5E6EB] py-[9px] `}>
         <input
           type="checkbox"
-          name={content}
+          name={SubMenu}
         />
-        <label>{content}</label>
+        <label className={`${className}`}>{SubMenu}</label>
       </div>
     </>
   );

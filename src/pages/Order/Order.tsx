@@ -1,5 +1,5 @@
 // react原生方法
-import React from "react";
+import React, { useState } from "react";
 // 匯入組件
 import Banner from "../../components/Carousel";
 import Product from "../../components/common/product";
@@ -11,15 +11,14 @@ import buttonClass from "./Order.module.css";
 import ProductFilter from "../../components/Order/ProductFilter";
 
 const Order: React.FC = () => {
-  // 創建一個狀態來存儲複選框的值，初始值為一個空的物件
-
+  // 控制form(主表單)開關狀態
+  const [MainMenu, setMainMenu] = useState(false);
 
   // 處理當用戶選取或取消選取複選框時的函數
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(event);
   };
-
 
   // banner
   const imageSrc = [
@@ -106,10 +105,10 @@ const Order: React.FC = () => {
           <Banner key={src} src={src} />
         ))}
       </Carousel>
-      <div>
-        {/* 列表外層 */}
+      {/* 列表外層 */}
+      <div className={`xl:flex xl:flex-row-reverse xl:justify-center xl:gap-[24px] xl:pt-[60px] xl:pb-[80px] `}>
         <div
-          className={` w-[100%] h-[100%] px-[12px] pt-[16px] pb-[23px] md:pb-[40px] md:px-[24px]  md:w-[768px] xl:w-[940px] `}
+          className={` w-[100%] h-[100%] px-[12px] pt-[16px] pb-[23px] md:pb-[40px] md:px-[24px]  md:w-[768px] xl:w-[940px] xl:p-[0] `}
         >
           {/* 上方選單 */}
           <div
@@ -118,7 +117,8 @@ const Order: React.FC = () => {
             <div className="hidden md:block">搜尋『關鍵字』共2,000個結果</div>
             <div className="">
               <button
-                className={`bg-[#F2F3F5] text-center px-[16px] py-[5px] rounded-[2px] mr-[8px] `}
+                onClick={() => setMainMenu(true)}
+                className={`bg-[#F2F3F5] text-center px-[16px] py-[5px] rounded-[2px] mr-[8px] xl:hidden `}
               >
                 篩選商品
               </button>
@@ -149,11 +149,11 @@ const Order: React.FC = () => {
           </div>
           {/* 商品列表分頁內容 */}
           <div
-            className={`flex flex-col gap-[12px] md:flex-row md:flex-wrap xl:justify-center `}
+            className={`flex flex-col gap-[12px] md:flex-row md:flex-wrap xl:justify-between `}
           >
             {productList.map((productItem) => (
               <Product
-                className={`xl:w-[284px]`}
+                className={`xl:!w-[284px]`}
                 key={productItem.id}
                 url={productItem.url}
                 title={productItem.title}
@@ -164,7 +164,11 @@ const Order: React.FC = () => {
           </div>
         </div>
         {/* 篩選列表 */}
-        <ProductFilter onSubmitForm={handleSubmit}/>
+        <ProductFilter
+          MainMenuOpen={MainMenu}
+          onSubmitForm={handleSubmit}
+          MainMenuClose={() => setMainMenu(false)}
+        />
       </div>
     </div>
   );
