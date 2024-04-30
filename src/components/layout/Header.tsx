@@ -10,6 +10,7 @@ import guestIcon from "@/assets/images/header/guest.svg";
 import { useSelector } from "react-redux";
 import { authActions } from "../../stores/auth.ts";
 import { useAppDispatch, RootState } from "../../stores/index.ts";
+// route
 import { NavLink } from "react-router-dom";
 import IconButton from "../common/IconButton.tsx";
 
@@ -104,7 +105,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <section className="relative bg-[#fff] w-[100%] h-[56px] py-[14px] px-[12px] md:pl-[20px] md:pr-[32px] flex justify-between items-center">
+      <section className="relative bg-[#fff] w-[100%] h-[56px] py-[14px] px-[12px] md:pl-[20px] md:pr-[32px] flex justify-between items-center shadow-md">
         {/* 左邊maxa logo */}
         <NavLink
           to={"/"}

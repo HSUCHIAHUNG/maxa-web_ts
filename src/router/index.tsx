@@ -9,7 +9,7 @@ const MemberPage = lazy(() => import("../layout/MemberLayout"));
 const AccountPage = lazy(() => import("../pages/Member/Account"));
 const EditPasswordPage = lazy(() => import("../pages/Guest/EditPassword"));
 const OrderPage = lazy(() => import("../pages/Order/Order"));
-
+const ProductDetailPage = lazy(() => import("../pages/Order/ProductDetail"))
 
 const router = createBrowserRouter([
   {
@@ -66,6 +66,14 @@ const router = createBrowserRouter([
           </Suspense>
         ),
         path: "/order",
+      },
+      {
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <ProductDetailPage />
+          </Suspense>
+        ),
+        path: "order/:productDetail",
       },
     ],
   },

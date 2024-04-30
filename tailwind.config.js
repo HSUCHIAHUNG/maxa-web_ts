@@ -13,6 +13,11 @@ export default {
     screens: {
       'xl': '1200px',
       'md': '768px',
+    },
+    extend: {
+      fontFamily: {
+        'Noto Sans TC': ['Noto Sans TC', 'sans-serif'],
+      },
     }
   },
   plugins: [

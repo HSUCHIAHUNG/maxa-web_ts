@@ -1,5 +1,6 @@
 // react原生方法
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 // 匯入組件
 import Banner from "../../components/Carousel";
 import Product from "../../components/common/product";
@@ -106,7 +107,9 @@ const Order: React.FC = () => {
         ))}
       </Carousel>
       {/* 列表外層 */}
-      <div className={`xl:flex xl:flex-row-reverse xl:justify-center xl:gap-[24px] xl:pt-[60px] xl:pb-[80px] `}>
+      <div
+        className={`xl:flex xl:flex-row-reverse xl:justify-center xl:gap-[24px] xl:pt-[60px] xl:pb-[80px] `}
+      >
         <div
           className={` w-[100%] h-[100%] px-[12px] pt-[16px] pb-[23px] md:pb-[40px] md:px-[24px]  md:w-[768px] xl:w-[940px] xl:p-[0] `}
         >
@@ -152,14 +155,15 @@ const Order: React.FC = () => {
             className={`flex flex-col gap-[12px] md:flex-row md:flex-wrap xl:justify-between `}
           >
             {productList.map((productItem) => (
-              <Product
-                className={`xl:!w-[284px]`}
-                key={productItem.id}
-                url={productItem.url}
-                title={productItem.title}
-                money={productItem.money}
-                tag={productItem.tag}
-              />
+              <Link key={productItem.id} to="/order/test">
+                <Product
+                  className={`xl:!w-[284px]`}
+                  url={productItem.url}
+                  title={productItem.title}
+                  money={productItem.money}
+                  tag={productItem.tag}
+                />
+              </Link>
             ))}
           </div>
         </div>

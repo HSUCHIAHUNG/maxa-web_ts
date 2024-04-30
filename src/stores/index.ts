@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from 'react-redux'  
 import authReducer from "./auth";
+import orderReducer from "./order";
+
 
 const store = configureStore({
-  reducer: {  auth: authReducer },
+  reducer: {  auth: authReducer, order: orderReducer },
 });
 
 // dispatch型別 
