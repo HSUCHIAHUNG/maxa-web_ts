@@ -1,4 +1,4 @@
-// react猿聲方法
+// react原生方法
 import React from "react";
 // ui kit
 import { Form, Input, Button } from "@arco-design/web-react";

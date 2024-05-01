@@ -1,19 +1,37 @@
 // react原生方法
 import React from "react";
 import { Link } from "react-router-dom";
+// redux
+import { useSelector } from "react-redux";
+// import { orderActions } from "../../stores/order";
+import { RootState } from "../../stores/index";
 // 匯入組件
 import Banner from "../../components/Carousel";
 import ColorButton from "../../components/common/ColorButton";
 import SelectStation from "../../components/Order/selectStation";
+import SelectTime from "../../components/Order/SelectTime";
+
 // ui kit
 import { Breadcrumb } from "@arco-design/web-react";
 import { Carousel } from "@arco-design/web-react";
 import BorderBox from "../../components/common/BorderBox";
 import { Steps } from "@arco-design/web-react";
+import { Tabs, Typography } from "@arco-design/web-react";
 
 const ProductDetail: React.FC = () => {
+  // redux(方法調用)
+  // const dispatch = useAppDispatch();
+  // redux(切換tab全域狀態)
+  // const switchTab = (tab: string) => {
+  //   dispatch(orderActions.switchTab(tab));
+  // };
+  // redux(tab狀態)
+  const bookingStage = useSelector(
+    (state: RootState) => state.order.bookingStage
+  );
   // ui kit
   const BreadcrumbItem = Breadcrumb.Item;
+  const TabPane = Tabs.TabPane;
   const Step = Steps.Step;
 
   // banner
@@ -177,27 +195,200 @@ const ProductDetail: React.FC = () => {
           </div>
         </BorderBox>
       </div>
-      {/* 乘車路線圖 */}
-      <div className={`flex items-center gap-[8px] pb-[20px]`}>
-        <span
-          className={`icon-[solar--ticket-bold-duotone] w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-[#86909C]`}
-        ></span>
-        <p className={`text-[16px]`}>乘車路線圖</p>
+      <div className="xl:w-[760px]">
+        {/* 乘車路線圖 */}
+        <div className={`flex items-center gap-[8px] pb-[20px]`}>
+          <span
+            className={`icon-[solar--ticket-bold-duotone] w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-[#86909C]`}
+          ></span>
+          <p className={`text-[16px]`}>乘車路線圖</p>
+        </div>
+        <BorderBox className={`rounded-[8px] p-[16px] md:p-[40px]`}>
+          <Steps type="dot" direction="vertical" current={8}>
+            {stationList.map((stationItem) => (
+              <Step
+                key={stationItem.id}
+                title={stationItem.station}
+                className={`text-16px`}
+                description={stationItem.description && stationItem.description}
+              />
+            ))}
+          </Steps>
+        </BorderBox>
+        {/* 選擇日期與票數 */}
+        {/* 標題 */}
+        <div className={` flex gap-[8px] py-[20px] md:pt-[40px] xl:pt-[60px]`}>
+          <span
+            className={`icon-[solar--ticket-bold-duotone] w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-[#86909C]`}
+          ></span>
+          <p className={`text-[16px] md:text-[20px]`}>選擇日期與票數</p>
+        </div>
+        <Tabs defaultActiveTab="1" type="card-gutter" className={``}>
+          <TabPane key="1" title="單程票">
+            <Typography.Paragraph>Content of Tab Panel 1</Typography.Paragraph>
+          </TabPane>
+          <TabPane key="2" title="來回票">
+            <Typography.Paragraph>
+              {/* 1. 選擇站點、日期 */}
+              <SelectStation></SelectStation>
+              {/* 2. 選擇去回程時間 */}
+              <SelectTime></SelectTime>
+            </Typography.Paragraph>
+          </TabPane>
+        </Tabs>
       </div>
-      <BorderBox className={`rounded-[8px] p-[16px] md:p-[40px]`}>
-        <Steps type="dot" direction="vertical" current={8}>
-          {stationList.map((stationItem) => (
-            <Step
-              key={stationItem.id}
-              title={stationItem.station}
-              className={`text-16px`}
-              description={stationItem.description && stationItem.description}
-            />
-          ))}
-        </Steps>
-      </BorderBox>
-      {/* 選擇日期與票數 */}
-      <SelectStation></SelectStation>
+      {/* 商品說明 */}
+      <div>
+        {/* 標題 */}
+        <div
+          className={`flex items-center gap-[8px] py-[20px] md:pt-[40px] xl:pt-[60]`}
+        >
+          <span
+            className={`icon-[solar--ticket-bold-duotone] w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-[#86909C]`}
+          ></span>
+          <p className={`text-[16px]`}>商品說明</p>
+        </div>
+        <p className=" text-[13px] leading-snug">
+          綠世界曾多次榮獲〔優良農場體驗評鑑
+          第１名〕，更保留了天然的原始森林及美麗湖泊，全園皆使用節能減碳的綠建築，不需冷氣即能冬暖夏涼，採用生態工法使雨水能重覆循環、滋養大地，園內並復育許多瀕臨絕種的台灣特有種，如：台灣萍蓬草、台灣山羌等，許多國內外學者都曾蒞臨觀摩。
+        </p>
+        <div className={`flex gap-[8px] pt-[20px]`}>
+          <p>￮</p>
+          <p className={`text-[16px]`}>日月潭纜車</p>
+        </div>
+        <p className={`pt-[8px] pl-[20px]`}>
+          全長約1877.15公尺，跨越海拔1044公尺的卜吉山，來回車程時間約16分鐘，讓您輕鬆悠遊日月潭，能夠俯瞰日月潭360度的湖光山色，若水氣充足，還有機會見到霧濛濛如仙境般的夢幻奇景。保證讓您飽覽美景、盡收眼底，是來訪日月潭不可錯過的旅遊方式。
+        </p>
+        <div className={`flex gap-[8px] pt-[20px]`}>
+          <p>￮</p>
+          <p className={`text-[16px]`}>日月潭纜車</p>
+        </div>
+        <p className={`pt-[8px] pl-[20px]`}>
+          全長約1877.15公尺，跨越海拔1044公尺的卜吉山，來回車程時間約16分鐘，讓您輕鬆悠遊日月潭，能夠俯瞰日月潭360度的湖光山色，若水氣充足，還有機會見到霧濛濛如仙境般的夢幻奇景。保證讓您飽覽美景、盡收眼底，是來訪日月潭不可錯過的旅遊方式。
+        </p>
+        <div className={`flex gap-[8px] pt-[20px]`}>
+          <p>￮</p>
+          <p className={`text-[16px]`}>日月潭纜車</p>
+        </div>
+        <p className={`pt-[8px] pl-[20px]`}>
+          全長約1877.15公尺，跨越海拔1044公尺的卜吉山，來回車程時間約16分鐘，讓您輕鬆悠遊日月潭，能夠俯瞰日月潭360度的湖光山色，若水氣充足，還有機會見到霧濛濛如仙境般的夢幻奇景。保證讓您飽覽美景、盡收眼底，是來訪日月潭不可錯過的旅遊方式。
+        </p>
+        <div className={`pt-[20px]`}>
+          <img
+            className=" h-[200px] rounded-2xl md:h-[420px]"
+            src="https://via.placeholder.com/1720x420"
+          />
+          <p className={`text-[16px] pt-[4px]`}>
+            時尚城中城線｜高鐵左營站往返墾丁巴士，輕鬆直達國境之南
+          </p>
+        </div>
+        <div className={`pt-[20px]`}>
+          <img
+            className=" h-[200px] rounded-2xl md:h-[420px]"
+            src="https://via.placeholder.com/1720x420"
+          />
+          <p className={`text-[16px] pt-[4px]`}>
+            綠世界生態農場｜採用生態工法使雨水能重覆循環、滋養大地，園內並復育許多瀕臨絕種的台灣特有種，如：台灣萍蓬草、台灣山羌等，許多國內外學者都曾蒞臨觀摩。
+          </p>
+        </div>
+        <div className={`pt-[20px]`}>
+          <img
+            className=" h-[200px] rounded-2xl md:h-[420px]"
+            src="https://via.placeholder.com/1720x420"
+          />
+          <p className={`text-[16px] pt-[4px]`}>
+            豐后線｜中社觀光花市，中社自產栽植的各種花卉任君採，全年皆有繽紛花海盛開,在花香中洗去所有的煩燥與疲憊，在群花中展現自我的風采!
+          </p>
+        </div>
+        <div
+          className={`flex items-center gap-[8px] py-[20px] md:pt-[40px] xl:pt-[60]`}
+        >
+          <span
+            className={`icon-[solar--ticket-bold-duotone] w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-[#86909C]`}
+          ></span>
+          <p className={`text-[16px]`}>使用說明</p>
+        </div>
+        <div className={`flex gap-[8px] pb-[20px]`}>
+          <p>￮</p>
+          <p className={`text-[16px]`}>
+            此為電子憑證(QR Code)，不另外寄送紙本票券。
+          </p>
+        </div>
+        <div className={`flex gap-[8px] pb-[20px]`}>
+          <p>￮</p>
+          <p className={`text-[16px]`}>
+            付款完成後，請至您的信箱收取【付款成功通知信】，憑信件內附之QR
+            Code進行核銷；或至網站的【會員中心】→【我的訂單】→【已付款】分頁 →
+            點選【查看】內附之 QR Code 進行核銷。
+          </p>
+        </div>
+        <div className={`flex flex-col gap-[8px] pt-[20px]`}>
+          <div className={`flex gap-[8px] text-[16px]`}>
+            <p>￮</p>
+            <p>核銷方式：</p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>
+              台灣好行獅山線一日券：上車時前請先向司機出示產品電子憑證(QR
+              code)來核銷；若已核銷過，請出示當日核銷畫面供司機確認以享一日票券權益。
+            </p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>
+              綠世界生態農場：入館前請先至園區剪票口出示產品電子憑證(QR
+              code)供工作人員來核銷。
+            </p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>
+              北埔商圈消費券：至消費券合作店家示產品電子憑證(QR
+              code)供工作人員來核銷。
+            </p>
+          </div>
+        </div>
+        <div
+          className={`flex items-center gap-[8px] pt-[20px] pb-[16px] md:pt-[40px] xl:pt-[60]`}
+        >
+          <span
+            className={`icon-[solar--ticket-bold-duotone] w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-[#86909C]`}
+          ></span>
+          <p className={`text-[16px]`}>注意事項</p>
+        </div>
+        <div className={`flex flex-col gap-[8px]`}>
+          <div className={`flex gap-[8px]`}>
+            <p>￮</p>
+            <p className={`text-[16px]`}>系統訂單注意事項：</p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>訂單成立一小時內要完成付款，超過付款期限系統會自動取消訂單。</p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>系統無提供修改訂單功能，如欲變更數量，需退票重訂。</p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>任一商品經兌換使用後，恕不接受退款退費。</p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>
+              凡商品未使用，請至「本網站」會員中心→我的訂單(已付款訂單)→申請退款作業。
+            </p>
+          </div>
+          <div className={`flex gap-[8px] text-[16px] pl-[20px]`}>
+            <p>￮</p>
+            <p>
+              如有系統或訂單問題，請於客服時間：週一~週五(不含國定例假日)上午9:00~12:00
+              / 下午13:00~17:00(中午休息一小時)，來電03-5910052。
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

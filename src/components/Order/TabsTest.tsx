@@ -5,22 +5,24 @@ import { useSelector } from "react-redux";
 import { orderActions } from "../../stores/order";
 import { useAppDispatch, RootState } from "../../stores/index";
 
-interface TabProps {
+interface TabsTestprops {
   children?: ReactNode;
 }
 
-const Tab: React.FC<TabProps> = ({ children }) => {
-  // redux
+const TabsTest: React.FC<TabsTestprops> = ({ children }) => {
+  // redux(方法調用)
   const dispatch = useAppDispatch();
-  const switchTab = () => {
-    dispatch(orderActions.switchTab("oneWayticket"));
+  // redux(切換tab全域狀態)
+  const switchTab = (tab: string) => {
+    dispatch(orderActions.switchTab(tab));
   };
-  const order = useSelector((state: RootState) => state.order.tab);
+  // redux(tab狀態)
+  const order = useSelector((state: RootState) => state.order);
   console.log(order);
 
   return (
     <>
-      {/* tab標題 */}
+      {/* 標題 */}
       <div className={` flex gap-[8px] py-[20px] md:pt-[40px] xl:pt-[60px]`}>
         <span
           className={`icon-[solar--ticket-bold-duotone] w-[24px] h-[24px] md:w-[32px] md:h-[32px] text-[#86909C]`}
@@ -30,12 +32,13 @@ const Tab: React.FC<TabProps> = ({ children }) => {
       <div>
         <ul className={`flex  gap-[4px] `}>
           <li
-            onClick={switchTab}
+            onClick={() => switchTab("oneWayticket")}
             className={`px-[16px] py-[7px] border border-solid border-[#E5E6EB]`}
           >
             單程票
           </li>
           <li
+            onClick={() => switchTab("returnTicket")}
             className={`px-[16px] py-[7px] border border-solid border-[#E5E6EB]`}
           >
             來回票
@@ -44,11 +47,12 @@ const Tab: React.FC<TabProps> = ({ children }) => {
         <div
           className={`border border-solid border-[#E5E6EB] rounded-[0_0_8px_8px] `}
         >
-          {children}
+          {/* {order.oneWayticket && children}
+          {order.returnTicket && children} */}
         </div>
       </div>
     </>
   );
 };
 
-export default Tab;
+export default TabsTest;
