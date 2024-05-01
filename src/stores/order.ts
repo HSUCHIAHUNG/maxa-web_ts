@@ -21,7 +21,7 @@ const orderSlice = createSlice({
   initialState: initialOrderState,
   reducers: {
     // 切換訂購階段
-    switchTab(state, action: PayloadAction<string>) {
+    switchTab(state, action: PayloadAction<'selectStation' | 'selectTime'>) {
       state.bookingStage = action.payload;
     },
     // 訂車資料儲存

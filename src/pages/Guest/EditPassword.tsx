@@ -2,7 +2,7 @@ import React from "react";
 // ui kit
 import { Form, Input, Button } from "@arco-design/web-react";
 // 驗證規則
-import { email } from "../../utils/rules";
+// import { email } from "../../utils/rules";
 
 const EditPassword: React.FC = () => {
   // ui kit

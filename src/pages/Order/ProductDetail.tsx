@@ -29,6 +29,7 @@ const ProductDetail: React.FC = () => {
   const bookingStage = useSelector(
     (state: RootState) => state.order.bookingStage
   );
+  console.log(bookingStage);
   // ui kit
   const BreadcrumbItem = Breadcrumb.Item;
   const TabPane = Tabs.TabPane;

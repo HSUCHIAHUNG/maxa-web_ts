@@ -110,7 +110,7 @@ const SelectTime: React.FC<selectTimeProps> = () => {
 
   // 選擇資料
   const setSelectData = (
-    selectedRowKeys: (string | number)[],
+    _selectedRowKeys: (string | number)[],
     selectedRows: object,
     selectItem: string
   ) => {
