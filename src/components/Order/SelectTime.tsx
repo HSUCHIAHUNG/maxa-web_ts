@@ -1,14 +1,28 @@
 // react原生方法
-import React, { useRef } from "react";
+import React from "react";
 // redux
 import { useSelector } from "react-redux";
 import { orderActions } from "../../stores/order";
 import { RootState, useAppDispatch } from "../../stores/index";
 // ui kit
-import { Button, Form, Table, TableColumnProps } from "@arco-design/web-react";
+import {
+  Button,
+  Divider,
+  Form,
+  Table,
+  TableColumnProps,
+} from "@arco-design/web-react";
 
-interface selectTimeProps {
+interface SelectTimeProps {
   className?: string;
+}
+
+interface SelectTimeData {
+  id: string;
+  startStation: string;
+  endStation: string;
+  seats: string;
+  Vehicles: string;
 }
 
 // 訂車時刻title
@@ -79,7 +93,7 @@ const data = [
   },
 ];
 
-const SelectTime: React.FC<selectTimeProps> = () => {
+const SelectTime: React.FC<SelectTimeProps> = () => {
   // redux(方法調用)
   const dispatch = useAppDispatch();
   // redux(tab狀態)
@@ -91,9 +105,6 @@ const SelectTime: React.FC<selectTimeProps> = () => {
     (state: RootState) => state.order.bookingData
   );
 
-  // 選擇訂車時間
-  const SelectData = useRef({ startTime: {}, endTime: {} });
-
   // ui kit
   const FormItem = Form.Item;
   const [form] = Form.useForm();
@@ -102,98 +113,144 @@ const SelectTime: React.FC<selectTimeProps> = () => {
   const loginSubmit = (value: object) => {
     console.log(value);
     // redux(切換tab全域狀態)
-    dispatch(orderActions.switchTab("selectTime"));
+    dispatch(orderActions.switchTab("selectSeats"));
   };
 
   // 控制訂車階段顯示
   const isOpen = () => (bookingStage !== "selectTime" ? "hidden" : "block");
+  // 劃位階段顯示
+  const selectSeatIsOpen = () =>
+    bookingStage !== "selectSeats" ? "hidden" : "block";
 
   // 選擇資料
   const setSelectData = (
     _selectedRowKeys: (string | number)[],
-    selectedRows: object,
+    selectedRows: SelectTimeData[],
     selectItem: string
   ) => {
-    const selectedItem = selectItem as keyof typeof SelectData.current;
-    SelectData.current[selectedItem] = selectedRows;
-
-    // 使用類型断言將 SelectData.current[selectedItem] 斷言為一个数组
-    const selectedItemArray = SelectData.current[selectedItem] as object[];
     // 新資料存到Redux
-    dispatch(orderActions.setTimeData([selectItem, selectedItemArray[0]]));
-    console.log(bookingData);
+    selectedRows.forEach((row) => {
+      dispatch(orderActions.setTimeData([selectItem, row]));
+    });
   };
 
   return (
     <>
-      <Form
-        form={form}
-        autoComplete="on"
-        requiredSymbol={{ position: "start" }}
-        layout="vertical"
-        onSubmit={loginSubmit}
-        className={isOpen()}
-      >
-        <div className={` md:gap-[20px] `}>
-          <FormItem label="選擇去程班次" field="startTime" required>
+      {isOpen() === "block" && (
+        <Form
+          form={form}
+          autoComplete="on"
+          requiredSymbol={{ position: "start" }}
+          layout="vertical"
+          onSubmit={loginSubmit}
+          className={`${isOpen()}`}
+        >
+          <div className={` md:gap-[20px] `}>
+            <FormItem label="選擇去程班次" field="startTime" required>
+              <Table
+                scroll={{
+                  x: 630,
+                }}
+                rowKey="id"
+                columns={columns}
+                data={data}
+                pagination={false}
+                hover
+                className={`w-full`}
+                rowSelection={{
+                  type: "radio",
+                  onChange: (selectedRowKeys, selectedRows) =>
+                    setSelectData(selectedRowKeys, selectedRows, "startTime"),
+                }}
+              />
+            </FormItem>
+            <FormItem label="選擇回程班次" field="endTime" required>
+              <Table
+                scroll={{
+                  x: 630,
+                }}
+                rowKey="id"
+                columns={columns}
+                data={data}
+                pagination={false}
+                hover
+                className={`w-full`}
+                rowSelection={{
+                  type: "radio",
+                  onChange: (selectedRowKeys, selectedRows) =>
+                    setSelectData(selectedRowKeys, selectedRows, "endTime"),
+                }}
+              />
+            </FormItem>
+          </div>
+          <div className={`flex flex-col gap-[8px] md:flex-row`}>
+            <FormItem className={`m-0 md:w-[180px]`}>
+              <Button
+                onClick={() =>
+                  dispatch(orderActions.switchTab("selectStation"))
+                }
+                className={`w-[100%] !text-[#4E5969] !bg-[#F2F3F5] !m-0`}
+                type="primary"
+                htmlType="button"
+              >
+                上一步，重新查詢班次
+              </Button>
+            </FormItem>
+            <FormItem className={`m-0`}>
+              <Button
+                className={`w-[100%] !bg-[#3A57E8] !m-0`}
+                type="primary"
+                htmlType="submit"
+              >
+                下一步，選擇票種數量與座位
+              </Button>
+            </FormItem>
+          </div>
+        </Form>
+      )}
+      {/* 畫位階段顯示已選擇車次列表 */}
+      {selectSeatIsOpen() === "block" && (
+        <div>
+          <Divider
+            style={{
+              borderBottomStyle: "dashed",
+              margin: "16px 0",
+            }}
+          />
+          <div className={`pb-[16px]`}>
+            <p className={`text-[#4E5969] pb-[8px]`}>去程班次</p>
             <Table
               scroll={{
                 x: 630,
               }}
-              rowKey="id"
               columns={columns}
-              data={data}
+              data={[bookingData.timeData.startTime]}
+              rowKey="id"
               pagination={false}
-              hover
               className={`w-full`}
-              rowSelection={{
-                type: "radio",
-                onChange: (selectedRowKeys, selectedRows) =>
-                  setSelectData(selectedRowKeys, selectedRows, "startTime"),
-              }}
             />
-          </FormItem>
-          <FormItem label="選擇回程班次" field="endTime" required>
+          </div>
+          <div>
+            <p className={`text-[#4E5969] pb-[8px]`}>回程班次</p>
             <Table
               scroll={{
                 x: 630,
               }}
-              rowKey="id"
               columns={columns}
-              data={data}
+              data={[bookingData.timeData.endTime]}
+              rowKey="id"
               pagination={false}
-              hover
               className={`w-full`}
-              rowSelection={{
-                type: "radio",
-                onChange: (selectedRowKeys, selectedRows) =>
-                  setSelectData(selectedRowKeys, selectedRows, "endTime"),
-              }}
             />
-          </FormItem>
+          </div>
+          <Divider
+            style={{
+              borderBottomStyle: "dashed",
+              margin: "16px 0",
+            }}
+          />
         </div>
-        <div className={`flex flex-col gap-[8px] md:flex-row`}>
-          <FormItem className={`m-0 md:w-[180px]`}>
-            <Button
-              onClick={() => dispatch(orderActions.switchTab("selectStation"))}
-              className={`w-[100%] !text-[#4E5969] !bg-[#F2F3F5] !m-0`}
-              type="primary"
-              htmlType="button"
-            >
-              上一步，重新查詢班次
-            </Button>
-          </FormItem>
-          <FormItem className={`m-0`}>
-            <Button
-              className={`w-[100%] !bg-[#3A57E8] !m-0`}
-              type="primary"
-              htmlType="submit"
-            >
-              下一步，選擇票種數量與座位
-            </Button>
-          </FormItem>
-        </div>
-      </Form>
+      )}
     </>
   );
 };

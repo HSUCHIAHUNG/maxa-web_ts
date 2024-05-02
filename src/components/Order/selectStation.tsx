@@ -54,58 +54,52 @@ const SelectStation: React.FC<selectStationProps> = ({ className }) => {
   const isOpen = () => (bookingStage !== "selectStation" ? "hidden" : "block");
 
   return (
-    <>
-      <Form
-        form={form}
-        autoComplete="on"
-        requiredSymbol={{ position: "start" }}
-        layout="vertical"
-        onSubmit={loginSubmit}
-        className={` ${className}`}
-      >
-        <div className={`md:flex md:gap-[20px] md:w-[420px] `}>
-          <FormItem label="選擇起點" field="startStation" required>
-            <Select placeholder="選擇起點" options={options} allowClear />
-          </FormItem>
-          <FormItem label="選擇迄點" field="endStation" required>
-            <Select placeholder="選擇迄點" options={options} allowClear />
-          </FormItem>
-        </div>
-        <div className={`md:flex md:gap-[20px] md:w-[420px]`}>
-          <FormItem
-            label="去程日期"
-            field="startDate"
-            rules={[{ required: true }]}
-          >
-            <DatePicker placeholder="選擇去程日期" className={`w-full`} />
-          </FormItem>
-          <FormItem
-            label="回程日期"
-            field="endDate"
-            rules={[{ required: true }]}
-          >
-            <DatePicker placeholder="選擇回程日期" className={`w-full`} />
-          </FormItem>
-        </div>
-
-        <Divider
-          className={isOpen()}
-          style={{
-            borderBottomStyle: "dashed",
-            margin: "16px 0",
-          }}
-        />
-        <FormItem className={`m-0`}>
-          <Button
-            className={`w-[100%] !bg-[#3A57E8] !m-0 ${isOpen()}`}
-            type="primary"
-            htmlType="submit"
-          >
-            下一步，查詢班次
-          </Button>
+    <Form
+      form={form}
+      autoComplete="on"
+      requiredSymbol={{ position: "start" }}
+      layout="vertical"
+      onSubmit={loginSubmit}
+      className={` ${className}`}
+    >
+      <div className={`md:flex md:gap-[20px] md:w-[420px] `}>
+        <FormItem label="選擇起點" field="startStation" required>
+          <Select placeholder="選擇起點" options={options} allowClear />
         </FormItem>
-      </Form>
-    </>
+        <FormItem label="選擇迄點" field="endStation" required>
+          <Select placeholder="選擇迄點" options={options} allowClear />
+        </FormItem>
+      </div>
+      <div className={`md:flex md:gap-[20px] md:w-[420px]`}>
+        <FormItem
+          label="去程日期"
+          field="startDate"
+          rules={[{ required: true }]}
+        >
+          <DatePicker placeholder="選擇去程日期" className={`w-full`} />
+        </FormItem>
+        <FormItem label="回程日期" field="endDate" rules={[{ required: true }]}>
+          <DatePicker placeholder="選擇回程日期" className={`w-full`} />
+        </FormItem>
+      </div>
+
+      <Divider
+        className={isOpen()}
+        style={{
+          borderBottomStyle: "dashed",
+          margin: "16px 0",
+        }}
+      />
+      <FormItem className={`m-0 ${isOpen()}`}>
+        <Button
+          className={`w-[100%] !bg-[#3A57E8] !m-0 `}
+          type="primary"
+          htmlType="submit"
+        >
+          下一步，查詢班次
+        </Button>
+      </FormItem>
+    </Form>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // Import component
 import Checkbox from "../../components/common/Checkbox";
+import Mask from "../common/Mask";
 
 interface ProductFilterProps {
   onSubmitForm: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -63,11 +64,13 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 
   return (
     <>
-      <div
-        className={`fixed top-0 left-0 w-full h-full z-50 bg-[#000]/30 ${
-          !MainMenuOpen ? "hidden xl:hidden" : "md:block xl:hidden"
-        } `}
-      ></div>
+      {MainMenuOpen && (
+        <Mask
+          className={` ${
+            !MainMenuOpen ? "hidden xl:hidden" : "md:block xl:hidden"
+          } `}
+        ></Mask>
+      )}
 
       <div
         className={`fixed top-0 left-0 w-full h-full overflow-auto z-50 bg-[#fff] md:w-[320px] md:right-0 md:left-[initial] xl:w-[260px] xl:h-[746px] xl:contents ${
