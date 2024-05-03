@@ -97,7 +97,7 @@ const Order: React.FC = () => {
   ];
 
   return (
-    <div className=" relative">
+    <div className=" relative max-w-[320px]">
       <Carousel
         className={`overflow-x-hidden max-w-[1920px] h-[320px] md:h-[500px] `}
         autoPlay={true}

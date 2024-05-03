@@ -19,7 +19,7 @@ interface changeModel {
 const Forget: React.FC<forgetProps> = (props) => {
   // 父層props
   const { className, setModel, model } = props;
-  
+
   // 計時器狀態管理
   const { countdown, resetTimer } = useCountdownTimer({
     duration: 5, // Duration in seconds
@@ -62,52 +62,46 @@ const Forget: React.FC<forgetProps> = (props) => {
   };
 
   return (
-    <>
-      <Form
-        form={form}
-        autoComplete="on"
-        requiredSymbol={{ position: "start" }}
-        layout="vertical"
-        onSubmit={forgetSubmit}
-        className={` ${className} pt-[16px] w-[260px]`}
+    <Form
+      form={form}
+      autoComplete="on"
+      requiredSymbol={{ position: "start" }}
+      layout="vertical"
+      onSubmit={forgetSubmit}
+      className={` ${className} pt-[16px] w-[260px]`}
+    >
+      <p className="text-[13px] text-center pb-[16px]">{changeTitle[model]}</p>
+      <FormItem
+        label="註冊信箱"
+        field="email"
+        required
+        className={`${model !== "fotgetDefault" ? "hidden" : "block"}`}
+        rules={email}
       >
-        <p className="text-[13px] text-center pb-[16px]">
-          {changeTitle[model]}
-        </p>
-        <FormItem
-          label="註冊信箱"
-          field="email"
-          required
-          className={`${model !== "fotgetDefault" ? "hidden" : "block"}`}
-          rules={email}
+        <Input placeholder="請輸入信箱" />
+      </FormItem>
+      <FormItem className={``}>
+        <Button
+          className={`w-[100%] !bg-[#3A57E8]`}
+          type="primary"
+          htmlType="submit"
+          loading={model === "forgetTimerStart"}
+          onClick={handleButtonClick}
+          disabled={model === "forgetTimerStart"}
         >
-          <Input placeholder="請輸入信箱" />
-        </FormItem>
-        <FormItem className={``}>
-          <Button
-            className={`w-[100%] !bg-[#3A57E8]`}
-            type="primary"
-            htmlType="submit"
-            loading={model === "forgetTimerStart"}
-            onClick={handleButtonClick}
-            disabled={model === "forgetTimerStart"}
-          >
-            {changeButton[model]}
-          </Button>
-        </FormItem>
-        <FormItem
-          className={`${model !== "fotgetDefault" ? "hidden" : "block"}`}
+          {changeButton[model]}
+        </Button>
+      </FormItem>
+      <FormItem className={`${model !== "fotgetDefault" ? "hidden" : "block"}`}>
+        <Button
+          onClick={() => setModel("login")}
+          className={`w-[100%] !bg-[#F2F3F5]`}
+          type="text"
         >
-          <Button
-            onClick={() => setModel("login")}
-            className={`w-[100%] !bg-[#F2F3F5]`}
-            type="text"
-          >
-            <p className={`text-[#4E5969]`}>取消</p>
-          </Button>
-        </FormItem>
-      </Form>
-    </>
+          <p className={`text-[#4E5969]`}>取消</p>
+        </Button>
+      </FormItem>
+    </Form>
   );
 };
 
