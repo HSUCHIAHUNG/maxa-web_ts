@@ -8,7 +8,7 @@ import { RootState } from "../../stores/index";
 // 匯入組件
 import Banner from "../../components/Carousel";
 import ColorButton from "../../components/common/ColorButton";
-import SelectStation from "../../components/Order/SelectStation";
+import SelectStation from "../../components/Order/selectStation";
 import SelectTime from "../../components/Order/SelectTime";
 import SelectSeats from "../../components/Order/SelectSeats";
 

@@ -1,8 +1,12 @@
+// react原生方法
+import React from "react";
+// 匯入組件
 import OrderDetails from "../../components/common/OrderDetails";
+import PhoneInput from "../../components/common/Form/PhoneInput";
 // ui kit
-import { Form, Steps, Checkbox, Input, Select } from "@arco-design/web-react";
+import { Form, Steps, Checkbox, Select, Input } from "@arco-design/web-react";
 
-function PassengerData() {
+const PassengerData: React.FC = () => {
   // ui kit
   const Step = Steps.Step;
   const FormItem = Form.Item;
@@ -10,22 +14,12 @@ function PassengerData() {
   const Option = Select.Option;
 
   // 常用旅客資料
-  const options = ['Beijing', 'Shanghai', 'Guangzhou'];
-
-  // 同步更新至會員中心
-  function UpdateMemberData(
-    val: boolean,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    console.log(val);
-    console.log(event.target.defaultValue);
-  }
+  const options = ["Beijing", "Shanghai", "Guangzhou"];
 
   // 訂單乘客資料送出
   function loginSubmit(value: object) {
     console.log(value);
   }
-  
 
   return (
     <div className={` max-w-[900px] m-[0_auto] px-[12px] `}>
@@ -51,23 +45,27 @@ function PassengerData() {
       >
         {/* 訂單明細 */}
         <OrderDetails></OrderDetails>
-        <div className={`xl:w-[560px]`}>
+        <div className={`xl:w-[560px] flex flex-col gap-[16px] md:gap-[20px]`}>
           {/* 訂購人資料 */}
           <div
             className={` w-full border border-[#E5E6EB] border-solid rounded-[16px] py-[20px] px-[16px] md:px-[60px] md:py-[40px] `}
           >
+            {/* 同步更新至會員中心選項 */}
             <div
-              className={` flex flex-col w-full mb-[12px]  gap-[12px] md:flex-row md:items-center md:justify-between md:mb-[20px] `}
+              className={`flex flex-col w-full gap-[12px] mb-[12px] md:flex-row md:justify-between md:items-center md:mb-[20px]`}
             >
               <p className={`text-[16px] md:text-[20px] `}>訂購人資料</p>
-              <Checkbox
-                onChange={UpdateMemberData}
-                value="訂購人資料"
-                className={`p-0`}
+              <FormItem
+                field="orderUpdateFrequentTravelers"
+                required
+                className={`w-auto mb-0`}
               >
-                同步更新至會員中心
-              </Checkbox>
+                <Checkbox value="訂購人資料" className={`p-0`}>
+                  同步更新至會員中心
+                </Checkbox>
+              </FormItem>
             </div>
+            {/* 姓名 */}
             <FormItem
               label="姓名"
               field="orderName"
@@ -76,6 +74,7 @@ function PassengerData() {
             >
               <Input placeholder="請填寫姓名" allowClear />
             </FormItem>
+            {/* 身分證 */}
             <FormItem
               label="身分證或護照號碼"
               field="orderId"
@@ -84,27 +83,16 @@ function PassengerData() {
             >
               <Input placeholder="請填寫身分證或護照號碼" allowClear />
             </FormItem>
-            <FormItem
+            {/* 電話 */}
+            <Form.Item
               label="電話"
               field="orderphone"
               required
               className={`h-[66px]`}
             >
-              <Input
-                addBefore={
-                  <Select
-                    size={"mini"}
-                    placeholder="請選擇"
-                    style={{ width: 100 }}
-                  >
-                    <Select.Option value="+886">+886</Select.Option>
-                    <Select.Option value="+86">+86</Select.Option>
-                  </Select>
-                }
-                allowClear={true}
-                placeholder="請輸入手機號碼"
-              />
-            </FormItem>
+              <PhoneInput />
+            </Form.Item>
+            {/* 信箱 */}
             <FormItem
               label="Email"
               field="orderEmail"
@@ -118,28 +106,29 @@ function PassengerData() {
           <div
             className={` w-full border border-[#E5E6EB] border-solid rounded-[16px] py-[20px] px-[16px] md:px-[60px] md:py-[40px] `}
           >
+            {/* 同步更新至會員中心選項 */}
             <div
-              className={` flex flex-col w-full gap-[12px] md:flex-row md:justify-between md:items-center mb-[12px] md:mb-[20px] `}
+              className={`flex flex-col w-full gap-[12px] mb-[12px] md:flex-row md:justify-between md:items-center md:mb-[20px]`}
             >
-              <p className={`text-[16px] md:text-[20px] `}>取票人資料</p>
-              <Checkbox
-                onChange={UpdateMemberData}
-                value="訂購人資料"
-                className={`p-0`}
+              <p className={`text-[16px] md:text-[20px] `}>訂購人資料</p>
+              <FormItem
+                field="takerUpdateFrequentTravelers"
+                required
+                className={`w-auto mb-0`}
               >
-                同步更新至會員中心
-              </Checkbox>
+                <Checkbox value="訂購人資料" className={`p-0`}>
+                  同步更新至會員中心
+                </Checkbox>
+              </FormItem>
             </div>
+            {/* 常用旅客選單 */}
             <FormItem
               label="選擇常用旅客"
               field="takerFrequentTravelers"
               required
               className={`h-[66px]`}
             >
-              <Select
-                placeholder="Please select"
-                allowClear
-              >
+              <Select placeholder="Please select" allowClear>
                 {options.map((option, index) => (
                   <Option key={option} disabled={index === 3} value={option}>
                     {option}
@@ -147,6 +136,7 @@ function PassengerData() {
                 ))}
               </Select>
             </FormItem>
+            {/* 姓名 */}
             <FormItem
               label="姓名"
               field="takerName"
@@ -155,6 +145,7 @@ function PassengerData() {
             >
               <Input placeholder="請填寫姓名" allowClear />
             </FormItem>
+            {/* 身分證 */}
             <FormItem
               label="身分證或護照號碼"
               field="takerId"
@@ -163,27 +154,16 @@ function PassengerData() {
             >
               <Input placeholder="請填寫身分證或護照號碼" allowClear />
             </FormItem>
-            <FormItem
+            {/* 電話 */}
+            <Form.Item
               label="電話"
               field="takerphone"
               required
               className={`h-[66px]`}
             >
-              <Input
-                addBefore={
-                  <Select
-                    size={"mini"}
-                    placeholder="請選擇"
-                    style={{ width: 100 }}
-                  >
-                    <Select.Option value="+886">+886</Select.Option>
-                    <Select.Option value="+86">+86</Select.Option>
-                  </Select>
-                }
-                allowClear={true}
-                placeholder="請輸入手機號碼"
-              />
-            </FormItem>
+              <PhoneInput />
+            </Form.Item>
+            {/* 信箱 */}
             <FormItem
               label="Email"
               field="takerEmail"
@@ -193,11 +173,10 @@ function PassengerData() {
               <Input placeholder="請輸入信箱" />
             </FormItem>
           </div>
-          
         </div>
       </Form>
     </div>
   );
-}
+};
 
 export default PassengerData;

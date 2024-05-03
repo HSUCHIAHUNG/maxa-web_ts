@@ -3,7 +3,7 @@ import React from "react";
 const OrderDetails: React.FC = () => {
   return (
     <div
-      className={`border border-solid border-[#E5E6EB] rounded-[8px] w-[100%] xl:w-[320px]`}
+      className={`border border-solid border-[#E5E6EB] rounded-[8px] w-[100%] xl:h-[492px] xl:w-[320px]`}
     >
       <div className={`flex justify-between py-[11px] px-[16px]`}>
         <p>預約日期</p>

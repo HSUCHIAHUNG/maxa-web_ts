@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // Import component
 import Checkbox from "../../components/common/Checkbox";
 import Mask from "../common/Mask";
+import { Slider } from "@arco-design/web-react";
 
 interface ProductFilterProps {
   onSubmitForm: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -23,12 +24,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   });
 
   // 篩選表單(主選單)
-  const orderFilterList = [
-    "商品分類",
-    "票券標籤",
-    "車種設施",
-    "價格範圍 (TWD)",
-  ];
+  const orderFilterList = ["商品分類", "票券標籤", "車種設施", "價格範圍"];
 
   // 商品分類(子選單)
   const categories = [
@@ -57,7 +53,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   const renderCheckboxList = (items: string[], className?: string) => (
     <div className={`bg-[#F7F8FA] pl-[34px] pr-[12px] flex flex-col`}>
       {items.map((item: string) => (
-        <Checkbox key={item} SubMenu={item} className={className} />
+        <Checkbox key={item} SubMenu={item} className={className}/>
       ))}
     </div>
   );
@@ -104,7 +100,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                 <p>{orderFilterItem}</p>
               </div>
               {/* 子選單 */}
-              <div className={`bg-[#F7F8FA] flex flex-col `}>
+              <div className={`bg-[#F7F8FA] flex flex-col overflow-auto `}>
                 {/* 商品分類 */}
                 {orderFilterItem === "商品分類" &&
                   renderCheckboxList(categories)}
@@ -113,6 +109,21 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                   renderCheckboxList(ticketTag)}
                 {/* 車種設施 */}
                 {orderFilterItem === "車種設施" && renderCheckboxList(carType)}
+                {/* 價格範圍 */}
+                {orderFilterItem === "價格範圍" && (
+                  <Slider
+                    className={` `}
+                    defaultValue={[10, 80]}
+                    showInput={{
+                      hideControl: false,
+                      style: {
+                        width: 80,
+                      },
+                    }}
+                    range
+                    style={{ width: 360 }}
+                  />
+                )}
               </div>
             </div>
           ))}

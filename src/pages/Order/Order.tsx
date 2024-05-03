@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 // 匯入組件
 import Banner from "../../components/Carousel";
 import Product from "../../components/common/product";
+import BackToTopButton from "../../components/common/BackToTopButton";
 // ui kit
 import { Carousel, Dropdown, Menu, Button } from "@arco-design/web-react";
 import { IconDown } from "@arco-design/web-react/icon";
@@ -97,7 +98,7 @@ const Order: React.FC = () => {
   ];
 
   return (
-    <div className=" relative max-w-[320px]">
+    <div className=" relative ">
       <Carousel
         className={`overflow-x-hidden max-w-[1920px] h-[320px] md:h-[500px] `}
         autoPlay={true}
@@ -128,8 +129,8 @@ const Order: React.FC = () => {
               <Dropdown
                 droplist={
                   <Menu>
-                    <Menu.Item key="1">Menu Item 1</Menu.Item>
-                    <Menu.Item key="2">Menu Item 2</Menu.Item>
+                    <Menu.Item key="1">新 - 舊</Menu.Item>
+                    <Menu.Item key="2">舊 - 新</Menu.Item>
                   </Menu>
                 }
               >
@@ -138,8 +139,9 @@ const Order: React.FC = () => {
               <Dropdown
                 droplist={
                   <Menu>
-                    <Menu.Item key="1">Menu Item 1</Menu.Item>
-                    <Menu.Item key="2">Menu Item 2</Menu.Item>
+                    <Menu.Item key="1">最推薦</Menu.Item>
+                    <Menu.Item key="2">最低價</Menu.Item>
+                    <Menu.Item key="3">最新上架</Menu.Item>
                   </Menu>
                 }
               >
@@ -174,6 +176,7 @@ const Order: React.FC = () => {
           MainMenuClose={() => setMainMenu(false)}
         />
       </div>
+      <BackToTopButton />
     </div>
   );
 };

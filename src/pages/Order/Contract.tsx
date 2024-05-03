@@ -17,7 +17,9 @@ function Contract() {
     const handleScroll = () => {
       const { scrollTop, clientHeight, scrollHeight } =
         document.documentElement;
-      if (scrollTop + clientHeight === scrollHeight) {
+        console.log(scrollTop + clientHeight);
+        console.log(scrollHeight);
+      if (scrollTop + clientHeight >= scrollHeight - 1) {
         handleScrollToBottom();
       }
     };
