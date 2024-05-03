@@ -13,7 +13,7 @@ interface BookingData {
   timeData: { [key: string]: TimeData }; // 將 timeData 介面應用於 timeData 物件
 }
 
-type bookingStageType = "selectStation" | "selectTime" | 'selectSeats';
+type bookingStageType = "selectStation" | "selectTime" | 'selectSeats' ;
 
 const initialOrderState: {
   bookingStage: bookingStageType;

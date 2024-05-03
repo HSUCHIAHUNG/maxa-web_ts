@@ -1,5 +1,7 @@
 // react原生方法
 import React, { useState } from "react";
+// router
+import { useNavigate  } from 'react-router-dom';
 // redux
 import { useSelector } from "react-redux";
 import { orderActions } from "../../stores/order";
@@ -23,6 +25,9 @@ const SelectSeats: React.FC = () => {
     (state: RootState) => state.order.bookingStage
   );
 
+  // 動態路由切換
+  const navigate  = useNavigate ();
+
   // 手動劃位 
   const [ isSetSeats, setIsSetSeats ] = useState(false);
 
@@ -44,14 +49,19 @@ const SelectSeats: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     console.log(event.target.defaultValue);
-    if (event.target.defaultValue === "手動劃位") setIsSetSeats(true)
+    if (event.target.defaultValue === "手動劃位") setIsSetSeats(!isSetSeats)
   };
+
+  // 確定購買送出訂單
+  function submitSelectSeats () {
+    navigate('/contract')
+  }
 
   return (
     <>
       {isOpen() === "block" && (
         <>
-          {isSetSeats && <SetSeat></SetSeat>}
+          {isSetSeats && <SetSeat isSetSeats={isSetSeats} setIsSetSeats={setIsSetSeats}></SetSeat>}
           <Form
             form={form}
             autoComplete="on"
@@ -204,6 +214,7 @@ const SelectSeats: React.FC = () => {
               </FormItem>
               <FormItem className={`m-0`}>
                 <Button
+                  onClick={submitSelectSeats}
                   className={`w-[100%] !bg-[#3A57E8] !m-0`}
                   type="primary"
                   htmlType="submit"
