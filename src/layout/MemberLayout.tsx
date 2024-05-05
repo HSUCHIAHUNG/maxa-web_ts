@@ -1,9 +1,10 @@
 import React from "react";
 // 匯入組件
-import Account from "../pages/Member/Account";
+import Account from "../pages/MemberCenter/Account";
 // 圖片
 import memberIcon from "@/assets/images/header/memberAvatar.svg";
-import FrequentTravelers from "@/pages/Member/FrequentTravelers";
+import FrequentTravelers from "@/pages/MemberCenter/FrequentTravelers";
+import OrderManagement from "@/pages/MemberCenter/OrderManagement";
 
 const MemberCenter: React.FC = () => {
   return (
@@ -72,8 +73,12 @@ const MemberCenter: React.FC = () => {
           {/* 帳號管理 */}
           {false && <Account />}
           {/* 訂單管理 */}
+          {true && <OrderManagement />}
+
           {/* 常用旅客 */}
-          <FrequentTravelers />
+          {false && <FrequentTravelers />}
+
+          
         </div>
       </div>
     </>

@@ -1,8 +1,0 @@
-button:last-child .arco-btn-shape-square {
-    width: 123px;
-    border-left: 1px solid #E5E6EB !important;
-}
-
-button:last-child > span {
-    padding-right: 10px;
-}

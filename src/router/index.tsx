@@ -5,7 +5,7 @@ import { lazy, Suspense } from "react";
 const HomePage = lazy(() => import("@/pages/Home/Home"));
 const ErrorPage = lazy(() => import("@/pages/Error"));
 const ParnerPage = lazy(() => import("@/pages/Home/Parner"));
-const MemberPage = lazy(() => import("../layout/MemberLayout"));
+const MemberCenterPage = lazy(() => import("../layout/MemberLayout"));
 const EditPasswordPage = lazy(() => import("../pages/Guest/EditPassword"));
 const OrderPage = lazy(() => import("../pages/Order/Order"));
 const ProductDetailPage = lazy(() => import("../pages/Order/ProductDetail"));
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       {
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <MemberPage />
+            <MemberCenterPage />
           </Suspense>
         ),
         path: "/memberCenter",

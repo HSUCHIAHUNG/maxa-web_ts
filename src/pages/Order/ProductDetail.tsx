@@ -11,8 +11,8 @@ import ColorButton from "../../components/common/ColorButton";
 import SelectStation from "../../components/Order/selectStation";
 import SelectTime from "../../components/Order/SelectTime";
 import SelectSeats from "../../components/Order/SelectSeats";
-
-
+// 匯入樣式
+import '../../assets/ProductDetail.css'
 // ui kit
 import { Breadcrumb } from "@arco-design/web-react";
 import { Carousel } from "@arco-design/web-react";
@@ -226,11 +226,15 @@ const ProductDetail: React.FC = () => {
           ></span>
           <p className={`text-[16px] md:text-[20px]`}>選擇日期與票數</p>
         </div>
-        <Tabs defaultActiveTab="1" type="card-gutter" className={``}>
+        <Tabs
+          defaultActiveTab="1"
+          type="card-gutter"
+          extra={123}
+        >
           <TabPane key="1" title="單程票">
             <Typography.Paragraph>Content of Tab Panel 1</Typography.Paragraph>
           </TabPane>
-          <TabPane key="2" title="來回票">
+          <TabPane key="2" title="來回票" >
             <Typography.Paragraph>
               {/* 1. 選擇站點、日期 */}
               <SelectStation></SelectStation>

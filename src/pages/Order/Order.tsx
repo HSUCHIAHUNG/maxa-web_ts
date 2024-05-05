@@ -5,12 +5,10 @@ import { Link } from "react-router-dom";
 import Banner from "../../components/Carousel";
 import Product from "../../components/common/product";
 import BackToTopButton from "../../components/common/BackToTopButton";
+import ProductFilter from "../../components/Order/ProductFilter";
 // ui kit
 import { Carousel, Dropdown, Menu, Button } from "@arco-design/web-react";
 import { IconDown } from "@arco-design/web-react/icon";
-// 自定義樣式
-import buttonClass from "./Order.module.css";
-import ProductFilter from "../../components/Order/ProductFilter";
 
 const Order: React.FC = () => {
   // 控制form(主表單)開關狀態
@@ -145,7 +143,7 @@ const Order: React.FC = () => {
                   </Menu>
                 }
               >
-                <Button className={buttonClass.button}>
+                <Button >
                   <span>最推薦</span>
                   <IconDown />
                 </Button>

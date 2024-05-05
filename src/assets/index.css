@@ -10,29 +10,6 @@
   gap: 4px;
 }
 
-/* tab表單相關 */
-.arco-tabs-content-horizontal {
-  border-radius: 0 0 16px 16px !important;
-  border-color: #E5E6EB !important;
-  border-width: 2px !important;
-}
-
-.arco-tabs-content.arco-tabs-content-horizontal{
-  padding: 12px;
-}
-
-.arco-typography{
-  margin: 0 !important;
-}
-
-
-/* 在畫面大於 768 時，調整 arco-tabs-content-horizontal 的 padding */
-@media screen and (min-width: 768px) {
-  .arco-tabs-content.arco-tabs-content-horizontal {
-    padding: 40px;
-  }
-}
-
 /* radio */
 input[name='button-radio-group']:focus-visible + .arco-btn {
   box-shadow: 0 0 0 2px var(--color-primary-light-3);
@@ -116,3 +93,4 @@ input[name='card-radio-group']:focus-visible + .custom-radio-card {
 .back-to-top-button:hover {
   background-color: #0056b3;
 }
+
