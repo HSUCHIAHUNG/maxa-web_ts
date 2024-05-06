@@ -12,6 +12,8 @@ const ProductDetailPage = lazy(() => import("../pages/Order/ProductDetail"));
 const ContractPage = lazy(() => import("../pages/Order/Contract"));
 const PassengerDataPage = lazy(() => import("../pages/Order/PassengerData"));
 const CartPages = lazy(() => import("../pages/Cart"));
+const OrderContentPage = lazy(() => import("../pages/OrderContent"));
+const SearchOrderPage = lazy(() => import('../pages/SearchOrder'))
 
 const router = createBrowserRouter([
   {
@@ -91,7 +93,7 @@ const router = createBrowserRouter([
         ),
         path: "/passengerData",
       },
-      // 乘客資料
+      // 購物車
       {
         element: (
           <Suspense fallback={<div>Loading...</div>}>
@@ -99,6 +101,24 @@ const router = createBrowserRouter([
           </Suspense>
         ),
         path: "/cart",
+      },
+      // 訂單明細
+      {
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <OrderContentPage />
+          </Suspense>
+        ),
+        path: "/orderContent",
+      },
+      // 查詢訂單(非會員查詢)
+      {
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <SearchOrderPage />
+          </Suspense>
+        ),
+        path: "/searchOrderPage",
       },
     ],
   },

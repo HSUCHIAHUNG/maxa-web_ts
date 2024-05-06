@@ -1,20 +1,27 @@
 import React from "react";
 
-const OrderDetails: React.FC = () => {
+interface OrderDetailsProps {
+  title?: boolean
+  className?: string
+}
+
+const OrderDetails: React.FC<OrderDetailsProps> = ({ title = true, className }) => {
   return (
     <div
-      className={`border border-solid border-[#E5E6EB] rounded-[8px] w-[100%] xl:h-[492px] xl:w-[320px]`}
+      className={`${className} overflow-hidden border border-solid border-[#E5E6EB] rounded-[8px] w-[100%] xl:h-[492px] xl:w-[320px]`}
     >
-      <div className={`flex justify-between py-[11px] px-[16px]`}>
-        <p>預約日期</p>
-        <p>2024-04-21</p>
-      </div>
+      {title && (
+        <div className={`flex justify-between py-[11px] px-[16px]`}>
+          <p>預約日期</p>
+          <p>2024-04-21</p>
+        </div>
+      )}
       <img
         src={
           "https://ohh.okinawa/wpdir/wp-content/uploads/2018/07/59827ddcc6f8f06485fad8836fb30162.jpg"
         }
         alt={"productDetail"}
-        className=" w-[100%] object-cover"
+        className=" w-[100%] object-cover h-[200px]"
       />
       <div className="w-[100%] p-[16px] flex flex-col justify-between ">
         <div className={`pb-[20px]`}>
@@ -31,7 +38,7 @@ const OrderDetails: React.FC = () => {
         <div
           className={`border-b border-solid border-[#E5E6EB] w-full my-[8px] `}
         ></div>
-        <div className={`flex justify-between text-[16px]`}>
+        <div className={`flex justify-between text-[20px]`}>
           <p>總金額</p>
           <p>NT$1,100</p>
         </div>
