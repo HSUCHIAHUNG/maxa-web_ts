@@ -22,11 +22,11 @@ const Sigup: React.FC<signUpProps> = (props) => {
   const { className, setModel, model } = props;
 
   // 計時器狀態管理
-  const { countdown, resetTimer } = useCountdownTimer({
-    duration: 5, // Duration in seconds
+  const { countdown, resetTimer, setCountdown } = useCountdownTimer({
+    duration: -1, 
     onFinish: () => {
       setModel("signUpTimerEnd");
-      resetTimer(); // Reset the timer when it finishes
+      resetTimer(); 
     },
   });
 
@@ -51,6 +51,7 @@ const Sigup: React.FC<signUpProps> = (props) => {
   const handleButtonClick = () => {
     if (model !== "signUpTimerStart") {
       setModel("signUpTimerStart");
+      setCountdown(5)
     }
   };
 

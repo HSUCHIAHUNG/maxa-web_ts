@@ -1,5 +1,5 @@
 // react原生方法
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 // redux
 import { useSelector } from "react-redux";
@@ -42,7 +42,19 @@ function GuestPage() {
   const dialogToggle = () => {
     dispatch(authActions.dialogToggle());
     setModel("login");
+    // 恢復滾動軸
+    document.body.style.overflow = "";
   };
+
+  // 去除視窗外層滾動軸
+  useEffect(() => {
+    // Lock scrolling when Mask component mounts
+    document.body.style.overflow = "hidden";
+    // Unlock scrolling when Mask component unmounts
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   /** @const object title切換 */
   const titles: Titles = {
@@ -81,7 +93,7 @@ function GuestPage() {
         </div>
         {/* 右 */}
         <div
-          className={`w-[320px] h-[100%] pt-[16px] flex flex-col items-center md:w-[420px] md::h-[520px] justify-between`}
+          className={`w-[320px] overflow-y-auto pt-[16px] flex flex-col items-center md:w-[420px] md::h-[520px] justify-between`}
         >
           <p
             onClick={dialogToggle}

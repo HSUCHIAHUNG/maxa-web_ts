@@ -21,8 +21,8 @@ const Forget: React.FC<forgetProps> = (props) => {
   const { className, setModel, model } = props;
 
   // 計時器狀態管理
-  const { countdown, resetTimer } = useCountdownTimer({
-    duration: 5, // Duration in seconds
+  const { countdown, resetTimer, setCountdown } = useCountdownTimer({
+    duration: -1, // Duration in seconds
     onFinish: () => {
       setModel("forgetTimerEnd");
       resetTimer(); // Reset the timer when it finishes
@@ -42,6 +42,7 @@ const Forget: React.FC<forgetProps> = (props) => {
   const handleButtonClick = () => {
     if (model !== "forgetTimerStart") {
       setModel("forgetTimerStart");
+      setCountdown(5)
     }
   };
 

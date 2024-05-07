@@ -8,7 +8,7 @@ interface CountdownTimerProps {
 }
 
 const useCountdownTimer = ({ duration, onFinish }: CountdownTimerProps) => {
-  const [countdown, setCountdown] = useState(duration);
+  const [countdown, setCountdown] = useState(-1);
 
   /** @func 計時器 */
   useEffect(() => {
@@ -37,7 +37,7 @@ const useCountdownTimer = ({ duration, onFinish }: CountdownTimerProps) => {
     setCountdown(duration);
   };
 
-  return { countdown, resetTimer };
+  return { countdown, resetTimer, setCountdown  };
 };
 
 export default useCountdownTimer;

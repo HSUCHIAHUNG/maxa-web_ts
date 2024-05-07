@@ -1,11 +1,10 @@
 // 原生方法
 import React, { useState } from "react";
 import { useLocation, NavLink } from "react-router-dom";
-import { Input, Menu } from "@arco-design/web-react";
+import { Input } from "@arco-design/web-react";
 // Icon
 import headerText from "@/assets/images/header/header_text.svg";
 import memberIcon from "@/assets/images/header/memberAvatar.svg";
-import guestIcon from "@/assets/images/header/guest.svg";
 // redux
 import { useSelector } from "react-redux";
 import { authActions } from "../../stores/auth.ts";
@@ -130,7 +129,7 @@ const Header: React.FC = () => {
           {/* 手機版選單按鈕 */}
           <div onClick={() => toggleOpen("list")} className={`md:hidden group`}>
             <div
-              className={`icon-[solar--hamburger-menu-bold-duotone] w-[24px] h-[24px] cursor-pointer block md:hidden ${
+              className={`icon-[solar--hamburger-menu-bold-duotone] w-[24px] h-[24px] cursor-pointer block group-hover:text-[#3A57E8] md:hidden ${
                 currentPathName === "/searchOrder" ||
                 currentPathName === "/cart"
                   ? "text-[#3A57E8]"
@@ -138,7 +137,7 @@ const Header: React.FC = () => {
               } `}
             ></div>
             <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px]  ${
+              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] group-hover:block ${
                 currentPathName === "/searchOrder" ||
                 currentPathName === "/cart"
                   ? "block"
@@ -155,13 +154,13 @@ const Header: React.FC = () => {
               to={"/searchOrder"}
               className={({ isActive }) =>
                 [
-                  `icon-[solar--clipboard-text-bold-duotone] w-[24px] h-[24px] cursor-pointer hidden md:block `,
+                  `icon-[solar--clipboard-text-bold-duotone] w-[24px] h-[24px] cursor-pointer hidden md:block group-hover:text-[#3A57E8] `,
                   isActive ? "text-[#3A57E8]" : "text-[#4E5969]",
                 ].join(" ")
               }
             ></NavLink>
             <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px]  ${
+              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] group-hover:block  ${
                 currentPathName === "/searchOrder" ? "block" : "hidden"
               }`}
             ></div>
@@ -182,7 +181,7 @@ const Header: React.FC = () => {
             ></NavLink>
 
             <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px]  ${
+              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] group-hover:block  ${
                 currentPathName === "/cart" ? "block" : "hidden"
               }`}
             ></div>
@@ -191,19 +190,27 @@ const Header: React.FC = () => {
           {/* 手機版會員選單 */}
           <div
             onClick={
-              !auth ? () => toggleOpen("memberList") : () => dialogToggle()
+              auth ? () => toggleOpen("memberList") : () => dialogToggle()
             }
-            className={`${!auth ? "md:hidden" : "md:block"}`}
+            className={`group ${!auth ? "md:hidden" : "md:block"}`}
           >
+            {/* 登入icon */}
             <img
-              src={auth ? memberIcon : guestIcon}
+              src={auth ? memberIcon : ""}
               alt="會員"
               className={` w-[24px] h-[24px] cursor-pointer ${
-                list && "text-[#3A57E8]"
+                auth ? "block" : "hidden"
               }`}
             />
+            {/* 未登入icon */}
+            <span
+              className={`icon-[solar--user-circle-bold-duotone] w-[24px] h-[24px] group-hover:bg-[#3A57E8]  ${
+                auth ? "hidden" : "block"
+              } `}
+            ></span>
+            {/* active 樣式 */}
             <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] ${
+              className={`absolute w-[24px] h-[5px] bottom-[0px] bg-[#3A57E8] group-hover:block ${
                 currentPathName.includes("/memberCenter") ? "block" : "hidden"
               }`}
             ></div>
@@ -241,7 +248,7 @@ const Header: React.FC = () => {
       <div
         className={`${
           list ? "block" : "hidden"
-        } absolute z-[999] w-[100%] md:w-[20%] top-[77px] md:top-[60px] md:right-[20px] bg-[#fff] px-[8px] py-[4px]`}
+        } absolute z-[999] w-[100%] md:w-[20%] top-[56px] md:top-[60px] md:right-[20px] bg-[#fff] px-[8px] py-[4px] shadow-md md:hidden`}
       >
         {menuList.map((menuRoute) => (
           <NavLink
@@ -254,7 +261,7 @@ const Header: React.FC = () => {
                 className={`icon-[${getIconClassName(
                   menuRoute.lable
                 )}] w-[24px] h-[24px] cursor-pointer group-hover:text-[#3A57E8] ${
-                  currentPathName === `/${menuRoute.route}`
+                  currentPathName === `${menuRoute.route}`
                     ? "text-[#3A57E8]"
                     : "text-[#4E5969]"
                 } `}
@@ -262,7 +269,7 @@ const Header: React.FC = () => {
 
               <span
                 className={`group-hover:text-[#3A57E8] ${
-                  currentPathName === `/${menuRoute.route}`
+                  currentPathName === `${menuRoute.route}`
                     ? "text-[#3A57E8]"
                     : "text-[#4E5969]"
                 }`}
@@ -277,20 +284,21 @@ const Header: React.FC = () => {
       <ul
         className={`${
           memberList ? "block" : "hidden"
-        } absolute z-[999] w-[100%] md:w-[20%] top-[77px] md:top-[60px] md:right-[20px] bg-[#fff] px-[8px] py-[4px]`}
+        } absolute z-[999] w-[100%] md:w-[200px] top-[56px] md:top-[60px] md:right-[20px] bg-[#fff] px-[8px] py-[4px] shadow-md `}
       >
         {memberMenu.map((memberRoute) => (
           <NavLink
             to={memberRoute.route}
             key={memberRoute.id}
             className="group p-[9px] block"
+            onClick={() => dialogToggle()}
           >
             <div className="flex items-center gap-[16px]">
               <span
                 className={`icon-[${getIconClassName(
                   memberRoute.lable
                 )}] w-[24px] h-[24px] cursor-pointer group-hover:text-[#3A57E8] ${
-                  currentPathName === `/${memberRoute.route}`
+                  currentPathName === `${memberRoute.route}`
                     ? "text-[#3A57E8]"
                     : "text-[#4E5969]"
                 } `}
@@ -298,7 +306,7 @@ const Header: React.FC = () => {
 
               <span
                 className={`group-hover:text-[#3A57E8] ${
-                  currentPathName === `/${memberRoute.route}`
+                  currentPathName === `${memberRoute.route}`
                     ? "text-[#3A57E8]"
                     : "text-[#4E5969]"
                 }`}
