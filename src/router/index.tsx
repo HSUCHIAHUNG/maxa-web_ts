@@ -1,10 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "../layout/DefaultLayout";
 import { lazy, Suspense } from "react";
 
-const HomePage = lazy(() => import("@/pages/Home/Home"));
-const ErrorPage = lazy(() => import("@/pages/Error"));
-const ParnerPage = lazy(() => import("@/pages/Home/Parner"));
+const HomePage = lazy(() => import("../pages/Home/Home"));
+const ErrorPage = lazy(() => import("../pages/Error"));
+const ParnerPage = lazy(() => import("../pages/Home/Parner"));
 const MemberCenterPage = lazy(() => import("../layout/MemberLayout"));
 const EditPasswordPage = lazy(() => import("../pages/Guest/EditPassword"));
 const OrderPage = lazy(() => import("../pages/Order/Order"));
@@ -13,9 +13,16 @@ const ContractPage = lazy(() => import("../pages/Order/Contract"));
 const PassengerDataPage = lazy(() => import("../pages/Order/PassengerData"));
 const CartPages = lazy(() => import("../pages/Cart"));
 const OrderContentPage = lazy(() => import("../pages/OrderContent"));
-const SearchOrderPage = lazy(() => import('../pages/SearchOrder'))
+const SearchOrderPage = lazy(() => import("../pages/SearchOrder"));
+const AccountPage = lazy(() => import("../pages/MemberCenter/Account"));
+const FrequentTravelersPage = lazy(
+  () => import("../pages/MemberCenter/FrequentTravelers")
+);
+const OrderManagementPage = lazy(
+  () => import("../pages/MemberCenter/OrderManagement")
+);
 
-const router = createBrowserRouter([
+const routes = [
   {
     path: "/",
     element: <DefaultLayout />,
@@ -38,6 +45,35 @@ const router = createBrowserRouter([
           </Suspense>
         ),
         path: "/memberCenter",
+        children: [
+          // 帳號管理
+          {
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <AccountPage />
+              </Suspense>
+            ),
+            path: "",
+          },
+          // 訂單管理
+          {
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <FrequentTravelersPage />
+              </Suspense>
+            ),
+            path: "frequentTravelers",
+          },
+          // 常用旅客
+          {
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <OrderManagementPage />
+              </Suspense>
+            ),
+            path: "orderManagementPage",
+          },
+        ],
       },
       // 合作夥伴
       {
@@ -118,10 +154,16 @@ const router = createBrowserRouter([
             <SearchOrderPage />
           </Suspense>
         ),
-        path: "/searchOrderPage",
+        path: "/searchOrder",
       },
     ],
   },
-]);
+];
 
-export default router;
+const router = createBrowserRouter(routes);
+
+const Routes = () => {
+  return <RouterProvider router={router} />;
+};
+
+export default Routes;

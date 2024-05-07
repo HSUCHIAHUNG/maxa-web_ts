@@ -46,11 +46,11 @@ const SelectSeats: React.FC = () => {
   // 設定座位
   const seatHandler = (
     _checked: boolean,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    console.log(event.target.defaultValue);
-    if (event.target.defaultValue === "手動劃位") setIsSetSeats(!isSetSeats)
-  };
+    event: React.ChangeEvent<Element>
+) => {
+    if ((event.target as HTMLInputElement).defaultValue === "手動劃位") setIsSetSeats(!isSetSeats);
+};
+
 
   // 確定購買送出訂單
   function submitSelectSeats () {

@@ -1,4 +1,6 @@
+// react原生方法
 import React from "react";
+import { Outlet } from "react-router-dom";
 // 匯入組件
 import Account from "../pages/MemberCenter/Account";
 // 圖片
@@ -70,13 +72,14 @@ const MemberCenter: React.FC = () => {
               </div>
             </div>
           </div>
+          <Outlet /> 
           {/* 帳號管理 */}
-          {false && <Account />}
+          {/* {false && <Account />} */}
           {/* 訂單管理 */}
-          {true && <OrderManagement />}
+          {/* {true && <OrderManagement />} */}
 
           {/* 常用旅客 */}
-          {false && <FrequentTravelers />}
+          {/* {false && <FrequentTravelers />} */}
 
           
         </div>
