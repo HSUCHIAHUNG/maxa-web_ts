@@ -1,7 +1,9 @@
 // 原生方法
 import React, { useState } from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import { Input } from "@arco-design/web-react";
+// css樣式
+import "../../assets/Guest.css";
 // Icon
 import headerText from "@/assets/images/header/header_text.svg";
 import memberIcon from "@/assets/images/header/memberAvatar.svg";
@@ -20,8 +22,26 @@ interface IsOpenType {
 }
 
 const Header: React.FC = () => {
+  // redux方法呼叫
   const dispatch = useAppDispatch();
-  const dialogToggle = () => {
+
+  /** @func 全域狀態auth */
+  const auth = useSelector((state: RootState) => state.auth.isMember);
+
+  /** @func 當前路由方法 */
+  const location = useLocation();
+
+  /** @func 動態切換路由 */
+  const navigate = useNavigate();
+
+  /** @const {string} 當前路由path */
+  const currentPathName = location.pathname;
+
+  // ui ki( 搜尋框 )
+  const InputSearch = Input.Search;
+
+  // 開啟登入註冊選單
+  const setGuestIsOpen = () => {
     setOpen((prevState) => ({
       ...prevState,
       search: false,
@@ -32,8 +52,18 @@ const Header: React.FC = () => {
     }));
     dispatch(authActions.dialogToggle());
   };
-  /** @func 全域狀態auth */
-  const auth = useSelector((state: RootState) => state.auth.isMember);
+
+  // 關閉所有選單
+  const setCloseList = () => {
+    setOpen((prevState) => ({
+      ...prevState,
+      search: false,
+      list: false,
+      memberList: false,
+      langue: false,
+      cart: false,
+    }));
+  };
 
   // 選單開關狀態控制
   const [isOpen, setOpen] = useState<IsOpenType>({
@@ -45,21 +75,13 @@ const Header: React.FC = () => {
   });
   const { search, list, memberList } = isOpen;
 
-  /** @func 當前路由方法 */
-  const location = useLocation();
-  /** @const {string} 當前路由path */
-  const currentPathName = location.pathname;
-
-  // ui ki
-  const InputSearch = Input.Search;
-
-  /** @const {Array} 未登入 */
+  /** @const {Array} 未登入routes */
   const menuList = [
     { id: "1", lable: "購物車", route: "/cart" },
     { id: "2", lable: "訂單查詢", route: "/searchOrder" },
   ];
 
-  /** @const {Array} 會員登入nav */
+  /** @const {Array} 會員登入routes */
   const memberMenu = [
     { id: 1, lable: "帳號管理", route: "/memberCenter" },
     { id: 2, lable: "訂單管理", route: "/memberCenter/frequentTravelers" },
@@ -101,24 +123,90 @@ const Header: React.FC = () => {
     }));
   };
 
+  /** @func 搜尋商品 */
+  const searchProduct = (value: string) => {
+    console.log(value);
+    navigate("order");
+  };
+
   return (
     <>
       <section className="relative bg-[#fff] w-[100%] h-[56px] py-[14px] px-[12px] md:pl-[20px] md:pr-[32px] flex justify-between items-center shadow-md">
         {/* 左邊maxa logo */}
-        <NavLink
-          to={"/"}
-          className={`flex gap-[4px] items-center ${search && "hidden"}`}
-        >
-          <span className="icon-[solar--box-minimalistic-bold-duotone] w-[24px] h-[24px] text-[#4E5969]"></span>
-          <img src={headerText} alt="MAXA" className="w-[66px] h-[14px]" />
+        <div className={`flex gap-[4px] items-center ${search && "hidden"}`}>
+          {/* logo回首頁 */}
+          <NavLink to={"/"} className={`flex items-center`}>
+            <span className="icon-[solar--box-minimalistic-bold-duotone] w-[24px] h-[24px] text-[#4E5969]"></span>
+            <img src={headerText} alt="MAXA" className="w-[66px] h-[14px]" />
+          </NavLink>
+          {/* 電腦版搜尋行程 */}
           <InputSearch
+            onSearch={searchProduct}
             className={` w-[265px] h-[32px] hidden md:block `}
             placeholder="搜尋行程"
+            // loading
+            searchButton
           />
-        </NavLink>
+        </div>
 
-        {/* 右邊選單按鈕 */}
-        <div className={`flex gap-[24px] ${search && "hidden"}`}>
+        {/* 電腦版選單 */}
+        <div className={`flex gap-[24px] ${search && "hidden"} hidden md:flex`}>
+          {/* 查詢訂單 */}
+          <div
+            onClick={() => toggleOpen("cart")}
+            className={`group hidden md:block`}
+          >
+            <NavLink
+              to={"/searchOrder"}
+              className={({ isActive }) =>
+                [
+                  `icon-[solar--clipboard-text-bold-duotone] w-[24px] h-[24px] cursor-pointer hidden md:block group-hover:text-[#3A57E8] `,
+                  isActive ? "text-[#3A57E8]" : "text-[#4E5969]",
+                ].join(" ")
+              }
+            ></NavLink>
+            <div
+              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] group-hover:block  ${
+                currentPathName === "/searchOrder" ? "block" : "hidden"
+              }`}
+            ></div>
+          </div>
+          {/* 購物車 */}
+          <div
+            onClick={() => toggleOpen("cart")}
+            className={`group hidden md:block`}
+          >
+            <NavLink
+              to={"/cart"}
+              className={({ isActive }) =>
+                [
+                  `icon-[solar--cart-large-minimalistic-bold-duotone] w-[24px] h-[24px] cursor-pointer group-hover:text-[#3A57E8]`,
+                  isActive ? "text-[#3A57E8]" : "text-[#4E5969]",
+                ].join(" ")
+              }
+            ></NavLink>
+
+            <div
+              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] group-hover:block  ${
+                currentPathName === "/cart" ? "block" : "hidden"
+              }`}
+            ></div>
+          </div>
+          {/* 電腦版未登入選單 */}
+          <button
+            onClick={
+              auth ? () => toggleOpen("memberList") : () => setGuestIsOpen()
+            }
+            className={`${
+              !auth ? "hidden md:block" : "hidden"
+            } w-[95px] h-[32px] rounded-[100px] bg-[#3A57E8] text-center leading-[32px] text-[#fff]`}
+          >
+            登入/註冊
+          </button>
+        </div>
+
+        {/* 手機版選單 */}
+        <div className={`flex gap-[24px] ${search && "hidden"} md:hidden`}>
           {/* 手機版搜尋框按鈕 */}
           <span
             onClick={() => toggleOpen("search")}
@@ -145,52 +233,10 @@ const Header: React.FC = () => {
               }`}
             ></div>
           </div>
-          {/* 電腦版訂單查詢 */}
-          <div
-            onClick={() => toggleOpen("cart")}
-            className={`group hidden md:block`}
-          >
-            <NavLink
-              to={"/searchOrder"}
-              className={({ isActive }) =>
-                [
-                  `icon-[solar--clipboard-text-bold-duotone] w-[24px] h-[24px] cursor-pointer hidden md:block group-hover:text-[#3A57E8] `,
-                  isActive ? "text-[#3A57E8]" : "text-[#4E5969]",
-                ].join(" ")
-              }
-            ></NavLink>
-            <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] group-hover:block  ${
-                currentPathName === "/searchOrder" ? "block" : "hidden"
-              }`}
-            ></div>
-          </div>
-          {/* 電腦版購物車 */}
-          <div
-            onClick={() => toggleOpen("cart")}
-            className={`group hidden md:block`}
-          >
-            <NavLink
-              to={"/cart"}
-              className={({ isActive }) =>
-                [
-                  `icon-[solar--cart-large-minimalistic-bold-duotone] w-[24px] h-[24px] cursor-pointer group-hover:text-[#3A57E8]`,
-                  isActive ? "text-[#3A57E8]" : "text-[#4E5969]",
-                ].join(" ")
-              }
-            ></NavLink>
-
-            <div
-              className={`absolute w-[24px] h-[5px] bg-[#3A57E8] bottom-[0px] group-hover:block  ${
-                currentPathName === "/cart" ? "block" : "hidden"
-              }`}
-            ></div>
-          </div>
-
           {/* 手機版會員選單 */}
-          <div
+          <button
             onClick={
-              auth ? () => toggleOpen("memberList") : () => dialogToggle()
+              auth ? () => toggleOpen("memberList") : () => setGuestIsOpen()
             }
             className={`group ${!auth ? "md:hidden" : "md:block"}`}
           >
@@ -214,18 +260,7 @@ const Header: React.FC = () => {
                 currentPathName.includes("/memberCenter") ? "block" : "hidden"
               }`}
             ></div>
-          </div>
-          {/* 電腦版未登入選單 */}
-          <div
-            onClick={
-              auth ? () => toggleOpen("memberList") : () => dialogToggle()
-            }
-            className={`${
-              !auth ? "hidden md:block" : "hidden"
-            } w-[95px] h-[32px] rounded-[100px] bg-[#3A57E8] text-center leading-[32px] text-[#fff]`}
-          >
-            登入/註冊
-          </div>
+          </button>
         </div>
 
         {/* 手機版搜尋框 */}
@@ -239,8 +274,11 @@ const Header: React.FC = () => {
             className={`icon-[solar--arrow-left-outline] w-[24px] h-[24px] text-[#4E5969]`}
           ></span>
           <InputSearch
+            onSearch={searchProduct}
+            searchButton
             className={` w-[265px] h-[32px] `}
             placeholder="搜尋行程"
+            required
           />
         </div>
       </section>
@@ -252,6 +290,7 @@ const Header: React.FC = () => {
       >
         {menuList.map((menuRoute) => (
           <NavLink
+            onClick={() => setCloseList()}
             to={menuRoute.route}
             key={menuRoute.id}
             className="group p-[9px] block"
@@ -288,10 +327,10 @@ const Header: React.FC = () => {
       >
         {memberMenu.map((memberRoute) => (
           <NavLink
+            onClick={() => setCloseList()}
             to={memberRoute.route}
             key={memberRoute.id}
             className="group p-[9px] block"
-            onClick={() => dialogToggle()}
           >
             <div className="flex items-center gap-[16px]">
               <span

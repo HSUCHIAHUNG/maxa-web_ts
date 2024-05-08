@@ -18,7 +18,7 @@ function App() {
 
   // function createPost() {
   //   axios
-  //     .get('https://taitungttgo.cbsdinfo.com.tw/service/api/AllToken/GetAuthCode')
+  //     .get('/api/v1')
   //     .then((response) => {
   //       setPost(response.data);
   //     });
@@ -27,6 +27,7 @@ function App() {
   return (
     <>
       <Routes />
+
       { (isDialog && !auth) && <Guest /> }
     </>
   );

@@ -91,7 +91,7 @@ const routes = [
             <EditPasswordPage />
           </Suspense>
         ),
-        path: "/editPassword",
+        path: "/editPassword/:token",
       },
       // 行程產品
       {

@@ -56,6 +56,16 @@ function GuestPage() {
     };
   }, []);
 
+  // 點擊灰底區域關閉視窗
+  const handleBackdropClick = (
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    const target = event.target as HTMLElement; 
+    if (target.classList.contains("bg-[black]") && isDialog && !auth) {
+      dialogToggle(); // 关闭对话框
+    }
+  };
+
   /** @const object title切換 */
   const titles: Titles = {
     login: "歡迎登入",
@@ -84,6 +94,7 @@ function GuestPage() {
       className={`fixed top-0 left-0 w-full h-full z-50 flex justify-center items-center bg-[black] bg-opacity-25 ${
         isDialog && !auth ? "block" : "hidden"
       }`}
+      onClick={(e) => handleBackdropClick(e)}
     >
       {/* 內容 */}
       <div className=" w-[320px] h-[580px] bg-[white] pb-[20px] rounded-[16px] md:flex md:justify-center md:items-center md:w-[768px] ">
@@ -93,12 +104,12 @@ function GuestPage() {
         </div>
         {/* 右 */}
         <div
-          className={`w-[320px] overflow-y-auto pt-[16px] flex flex-col items-center md:w-[420px] md::h-[520px] justify-between`}
+          className={`w-[320px] max-h-[80vh] overflow-y-auto pt-[16px] flex flex-col items-center md:w-[420px] md:h-fit justify-between`}
         >
-          <p
+          <button
             onClick={dialogToggle}
             className="icon-[ri--close-fill] cursor-pointer h-[16px] w-[16px] mr-[16px] self-end  "
-          ></p>
+          ></button>
           <div>
             <p className={`text-center py-[8px]`}>{titles[model]}</p>
             <img src={Logo} alt="Logo" className={`w-[120px] h-[28px] `} />

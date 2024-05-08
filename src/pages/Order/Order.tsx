@@ -7,7 +7,13 @@ import Product from "../../components/common/product";
 import BackToTopButton from "../../components/common/BackToTopButton";
 import ProductFilter from "../../components/Order/ProductFilter";
 // ui kit
-import { Carousel, Dropdown, Menu, Button } from "@arco-design/web-react";
+import {
+  Carousel,
+  Dropdown,
+  Menu,
+  Button,
+  Pagination,
+} from "@arco-design/web-react";
 import { IconDown } from "@arco-design/web-react/icon";
 
 const Order: React.FC = () => {
@@ -36,6 +42,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "超值套票",
+      vehicleType: "無障礙班車",
+      createDate: "2023-01-01",
     },
     {
       id: 2,
@@ -43,6 +52,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "超值套票",
+      vehicleType: "可攜折疊式/拆解式自行車",
+      createDate: "2023-01-01",
     },
     {
       id: 3,
@@ -50,6 +62,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "超值套票",
+      vehicleType: "可攜折疊式/拆解式自行車",
+      createDate: "2023-01-01",
     },
     {
       id: 4,
@@ -57,6 +72,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "交通票券",
+      vehicleType: "無障礙班車",
+      createDate: "2023-01-01",
     },
     {
       id: 5,
@@ -64,6 +82,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "交通票券",
+      vehicleType: "可攜寵物",
+      createDate: "2023-01-01",
     },
     {
       id: 6,
@@ -71,6 +92,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "交通票券",
+      vehicleType: "可攜寵物",
+      createDate: "2023-01-01",
     },
     {
       id: 7,
@@ -78,6 +102,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "景觀門票",
+      vehicleType: "可攜折疊式/拆解式自行車",
+      createDate: "2023-01-01",
     },
     {
       id: 8,
@@ -85,6 +112,9 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "商品兌換券",
+      vehicleType: "可攜寵物",
+      createDate: "2023-01-01",
     },
     {
       id: 9,
@@ -92,8 +122,17 @@ const Order: React.FC = () => {
       title: "格上租車券+阿里山門票+奮起湖經典三大美食",
       money: "399",
       tag: ["國旅卡適用", "組合套票"],
+      productType: "景觀門票",
+      vehicleType: "無障礙班車",
+      createDate: "2023-01-01",
     },
   ];
+
+  // 取得產品
+  const getProduct = (pageNumber, pageSize) => {
+    console.log(pageNumber);
+    console.log(pageSize);
+  };
 
   return (
     <div className=" relative ">
@@ -143,7 +182,7 @@ const Order: React.FC = () => {
                   </Menu>
                 }
               >
-                <Button >
+                <Button>
                   <span>最推薦</span>
                   <IconDown />
                 </Button>
@@ -175,6 +214,21 @@ const Order: React.FC = () => {
         />
       </div>
       <BackToTopButton />
+      {/* 電腦版分頁 */}
+      <Pagination
+        onChange={getProduct}
+        className={`justify-center hidden md:flex `}
+        total={20}
+      />
+      {/* 手機版分頁 */}
+      <Pagination
+        onChange={getProduct}
+        pageSize={9}
+        simple
+        total={500}
+        size="small"
+        className={`md:hidden justify-center`}
+      />
     </div>
   );
 };

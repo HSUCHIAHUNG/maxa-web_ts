@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "../../assets/index.css"; // 這是可選的，用於定義按鈕的樣式
 
 const BackToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -31,8 +30,14 @@ const BackToTopButton = () => {
   return (
     <div>
       {isVisible && (
-        <button className="back-to-top-button" onClick={scrollToTop}>
-          返回頂部
+        <button
+          onClick={scrollToTop}
+          className={` fixed right-[20px] bottom-[20px] rounded-[8px] p-[10px] bg-[#F2F3F5] border border-solid border-[#E5E6EB] md:bottom-[80px] md:right-[80px] `}
+        >
+          <span
+            className="icon-[solar--arrow-up-outline] w-[20px] h-[20px] text-[#4E5969] "
+          ></span>
+          <p className={`text-[12px] hidden md:block`}>TOP</p>
         </button>
       )}
     </div>

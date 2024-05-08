@@ -3,14 +3,14 @@ import React from "react";
 // ui kit
 import { Form, Input, Button } from "@arco-design/web-react";
 // 驗證規則
-import { email } from "../../utils/rules";
+import { email, password } from "../../utils/rules";
 
-interface loginProps {
+interface LoginProps {
   className?: string;
   setModel: (state: string) => void;
 }
 
-const Login: React.FC<loginProps> = (props) => {
+const Login: React.FC<LoginProps> = (props) => {
   // 父層props
   const { className, setModel } = props;
   // ui kit
@@ -25,7 +25,7 @@ const Login: React.FC<loginProps> = (props) => {
     <>
       <Form
         form={form}
-        autoComplete="on"
+        autoComplete="off"
         requiredSymbol={{ position: "start" }}
         layout="vertical"
         onSubmit={loginSubmit}
@@ -34,7 +34,7 @@ const Login: React.FC<loginProps> = (props) => {
         <FormItem label="註冊信箱" field="email" required rules={email}>
           <Input placeholder="請輸入信箱" />
         </FormItem>
-        <FormItem label="密碼" field="password" required>
+        <FormItem label="密碼" field="password" required rules={password}>
           <Input.Password placeholder="請輸入密碼" autoComplete="on" />
         </FormItem>
         <button

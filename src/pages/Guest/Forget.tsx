@@ -36,13 +36,11 @@ const Forget: React.FC<forgetProps> = (props) => {
   /** @func login表單提交 */
   const forgetSubmit = (value: object) => {
     console.log(value);
-  };
+    /** @func 表單提交後開始計時器 */
 
-  /** @func 表單提交後開始計時器 */
-  const handleButtonClick = () => {
     if (model !== "forgetTimerStart") {
       setModel("forgetTimerStart");
-      setCountdown(5)
+      setCountdown(5);
     }
   };
 
@@ -87,7 +85,6 @@ const Forget: React.FC<forgetProps> = (props) => {
           type="primary"
           htmlType="submit"
           loading={model === "forgetTimerStart"}
-          onClick={handleButtonClick}
           disabled={model === "forgetTimerStart"}
         >
           {changeButton[model]}

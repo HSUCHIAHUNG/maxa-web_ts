@@ -3,7 +3,7 @@ import React from "react";
 // ui kit
 import { Form, Input, Button } from "@arco-design/web-react";
 // 驗證規則
-import { email } from "../../utils/rules";
+import { email, password } from "../../utils/rules";
 // 自定義hook
 import useCountdownTimer from "../../hook/useCountdownTimer";
 
@@ -23,10 +23,10 @@ const Sigup: React.FC<signUpProps> = (props) => {
 
   // 計時器狀態管理
   const { countdown, resetTimer, setCountdown } = useCountdownTimer({
-    duration: -1, 
+    duration: -1,
     onFinish: () => {
       setModel("signUpTimerEnd");
-      resetTimer(); 
+      resetTimer();
     },
   });
 
@@ -36,8 +36,13 @@ const Sigup: React.FC<signUpProps> = (props) => {
 
   /** @func signUp表單提交 */
   const signUpSubmit = (value: object) => {
-    setModel("signUpDefault");
+    // setModel("signUpDefault");
     console.log(value);
+    /** @func 表單提交後開始計時器 */
+    if (model !== "signUpTimerStart") {
+      setModel("signUpTimerStart");
+      setCountdown(5);
+    }
   };
 
   /** @const {object} 按鈕文字動態切換 */
@@ -45,14 +50,6 @@ const Sigup: React.FC<signUpProps> = (props) => {
     signUpDefault: "註冊",
     signUpTimerStart: `(${countdown}後可重新發送)`,
     signUpTimerEnd: "重新發送",
-  };
-
-  /** @func 表單提交後開始計時器 */
-  const handleButtonClick = () => {
-    if (model !== "signUpTimerStart") {
-      setModel("signUpTimerStart");
-      setCountdown(5)
-    }
   };
 
   return (
@@ -78,7 +75,7 @@ const Sigup: React.FC<signUpProps> = (props) => {
           label="姓名"
           field="namea"
           required
-          rules={email}
+          rules={[{required:true}]}
           className={model !== "signUpDefault" ? "hidden" : "block"}
         >
           <Input placeholder="請輸入姓名" />
@@ -87,6 +84,7 @@ const Sigup: React.FC<signUpProps> = (props) => {
           label="密碼"
           field="password"
           required
+          rules={password}
           className={model !== "signUpDefault" ? "hidden" : "block"}
         >
           <Input.Password placeholder="請輸入密碼" autoComplete="on" />
@@ -105,7 +103,6 @@ const Sigup: React.FC<signUpProps> = (props) => {
             className={`w-[100%] !bg-[#3A57E8]`}
             type="primary"
             htmlType="submit"
-            onClick={handleButtonClick}
             loading={model === "signUpTimerStart"}
             disabled={model === "signUpTimerStart"}
           >

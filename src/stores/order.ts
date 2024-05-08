@@ -34,15 +34,17 @@ const orderSlice = createSlice({
     switchTab(state, action: PayloadAction<bookingStageType>) {
       state.bookingStage = action.payload;
     },
-    // 訂車資料儲存
+    // 儲存搭車車站、日期
     setStationData(state, action: PayloadAction<[string, object]>) {
       const [keyToUpdate, newData] = action.payload;
       state.bookingData.stationData[keyToUpdate] = newData;
     },
+    // 儲存搭車時間
     setTimeData(state, action: PayloadAction<[string, TimeData]>) { 
       const [keyToUpdate, newData] = action.payload;
       state.bookingData.timeData[keyToUpdate] = newData;
     },
+    // 儲存搭車票數、座位
   },
 });
 

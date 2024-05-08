@@ -229,7 +229,6 @@ const ProductDetail: React.FC = () => {
         <Tabs
           defaultActiveTab="1"
           type="card-gutter"
-          extra={123}
         >
           <TabPane key="1" title="單程票">
             <Typography.Paragraph>Content of Tab Panel 1</Typography.Paragraph>
