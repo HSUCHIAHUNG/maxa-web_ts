@@ -20,9 +20,7 @@ interface SetSeatProps {
 
 const SetSeat: React.FC<SetSeatProps> = ({ isSetSeats, setIsSetSeats }) => {
   const [seatMessage, setSeatMessage] = useState(false);
-
-  // 座位列表
-  const seatArr = [
+  const [seatArr, setSeatArr] = useState([
     { id: 1, type: "driver", name: "" },
     { id: 2, type: "null", name: "" },
     { id: 3, type: "null", name: "" },
@@ -32,49 +30,57 @@ const SetSeat: React.FC<SetSeatProps> = ({ isSetSeats, setIsSetSeats }) => {
     { id: 7, type: "sear_n", name: "B1" },
     { id: 8, type: "null", name: "" },
     { id: 9, type: "null", name: "" },
-    { id: 10, type: "exit", name: "" },
-    { id: 11, type: "driver", name: "" },
-    { id: 12, type: "sear_n", name: "A2" },
-    { id: 13, type: "sear_n", name: "A3" },
-    { id: 14, type: "sear_n", name: "A4" },
-    { id: 15, type: "sear_n", name: null },
-    { id: 16, type: "sear_n", name: "B1" },
-    { id: 17, type: "sear_n", name: "B2" },
-    { id: 18, type: "sear_n", name: "B3" },
-    { id: 19, type: "sear_n", name: "B4" },
-    { id: 20, type: "exit", name: "" },
-    { id: 21, type: "driver", name: "" },
-    { id: 22, type: "sear_n", name: "A2" },
-    { id: 23, type: "sear_n", name: "A3" },
-    { id: 24, type: "sear_n", name: "A4" },
-    { id: 25, type: "sear_n", name: null },
-    { id: 26, type: "sear_n", name: "B1" },
-    { id: 27, type: "sear_n", name: "B2" },
-    { id: 28, type: "sear_n", name: "B3" },
-    { id: 29, type: "sear_n", name: "B4" },
-    { id: 30, type: "exit", name: "" },
-    { id: 31, type: "driver", name: "" },
-    { id: 32, type: "sear_n", name: "A2" },
-    { id: 33, type: "sear_n", name: "A3" },
-    { id: 34, type: "sear_n", name: "A4" },
-    { id: 35, type: "sear_n", name: null },
-    { id: 36, type: "sear_n", name: "B1" },
-    { id: 37, type: "sear_n", name: "B2" },
-    { id: 38, type: "sear_n", name: "B3" },
-    { id: 39, type: "sear_n", name: "B4" },
-    { id: 40, type: "exit", name: "" },
-    { id: 41, type: "driver", name: "" },
-    { id: 42, type: "sear_n", name: "A2" },
-    { id: 43, type: "sear_n", name: "A3" },
-    { id: 44, type: "sear_n", name: "A4" },
-    { id: 45, type: "sear_n", name: null },
-    { id: 46, type: "sear_n", name: "B1" },
-    { id: 47, type: "sear_n", name: "B2" },
-    { id: 48, type: "sear_n", name: "B3" },
-    { id: 49, type: "sear_n", name: "B4" },
-    { id: 50, type: "exit", name: "" },
-  ];
+    { id: 10, type: "sear_n", name: "E1" },
+    { id: 11, type: "sear_n", name: "A2" },
+    { id: 12, type: "sear_n", name: "B2" },
+    { id: 13, type: "null", name: "" },
+    { id: 14, type: "null", name: "" },
+    { id: 15, type: "seat_d", name: "" },
 
+    { id: 16, type: "sear_n", name: "A3" },
+    { id: 17, type: "sear_n", name: "B3" },
+    { id: 18, type: "null", name: "" },
+    { id: 19, type: "null", name: "" },
+    { id: 20, type: "seat_d", name: "" },
+
+    { id: 21, type: "sear_n", name: "A4" },
+    { id: 22, type: "sear_n", name: "B4" },
+    { id: 23, type: "null", name: "" },
+    { id: 24, type: "null", name: "" },
+    { id: 25, type: "sear_n", name: "E4" },
+
+    { id: 26, type: "exit", name: "" },
+    { id: 27, type: "null", name: "" },
+    { id: 28, type: "null", name: "" },
+    { id: 29, type: "null", name: "" },
+    { id: 30, type: "istairs", name: null },
+
+    { id: 31, type: "sear_n", name: "A5" },
+    { id: 32, type: "sear_n", name: "B5" },
+    { id: 33, type: "null", name: "" },
+    { id: 34, type: "sear_n", name: "D5" },
+    { id: 35, type: "sear_n", name: "E5" },
+
+    { id: 36, type: "sear_n", name: "A6" },
+    { id: 37, type: "sear_n", name: "B6" },
+    { id: 38, type: "null", name: "" },
+    { id: 39, type: "sear_n", name: "D6" },
+    { id: 40, type: "sear_n", name: "E6" },
+
+    { id: 41, type: "sear_n", name: "A7" },
+    { id: 42, type: "sear_n", name: "B7" },
+    { id: 43, type: "null", name: "" },
+    { id: 44, type: "sear_n", name: "D7" },
+    { id: 45, type: "sear_n", name: "E7" },
+
+    { id: 46, type: "sear_n", name: "A8" },
+    { id: 47, type: "sear_n", name: "B8" },
+    { id: 48, type: "null", name: "" },
+    { id: 49, type: "sear_n", name: "D8" },
+    { id: 50, type: "sear_n", name: "E8" },
+  ]); // 座位列表的狀態
+
+  // 設定座位icon
   const setSeatImg = (type: string | null) => {
     if (type === "driver") return driver;
     if (type === "seat_s") return seat_s;
@@ -84,9 +90,22 @@ const SetSeat: React.FC<SetSeatProps> = ({ isSetSeats, setIsSetSeats }) => {
     return sear_n;
   };
 
-  function submitSetSeat () {
-    setSeatMessage(true)
+  // 提交訂單跳轉頁面到合約頁面
+  function submitSetSeat() {
+    setSeatMessage(true);
   }
+
+  // 在點擊按鈕後更新座位的類型並更換圖片
+  const handleClick = (id: number) => {
+    setSeatArr((prevSeatArr) => {
+      return prevSeatArr.map((seat) => {
+        if (seat.id === id && seat.type === "sear_n") {
+          return { ...seat, type: "seat_s" }; // 更新座位類型為 "seat_s"
+        }
+        return seat; // 如果不是目標座位，保持原樣
+      });
+    });
+  };
 
   return (
     <>
@@ -137,13 +156,14 @@ const SetSeat: React.FC<SetSeatProps> = ({ isSetSeats, setIsSetSeats }) => {
               <div className="relative w-[298px] h-[666px] md:m-[0_auto]">
                 <img src={SeatsBg} alt="背景圖" className={``} />
                 {seatArr.map((seat, index) => (
-                  <div
+                  <button
                     style={{
                       position: "absolute",
                       top: `${Math.floor(index / 5) * 60 + 60}px`, // 每5个座位换行，每行间距60px
                       left: `${16 + (index % 5) * 54}px`, // 每行第一个座位left值为16px，每个座位水平间距4px
                     }}
                     key={seat.id}
+                    onClick={() => handleClick(seat.id)} // 在點擊時調用 handleClick 函數
                   >
                     <img
                       src={setSeatImg(seat.type)}
@@ -155,7 +175,7 @@ const SetSeat: React.FC<SetSeatProps> = ({ isSetSeats, setIsSetSeats }) => {
                     >
                       {seat.name}
                     </p>
-                  </div>
+                  </button>
                 ))}
               </div>
               {/* 下方已選擇座位 & 按鈕 */}
@@ -169,7 +189,7 @@ const SetSeat: React.FC<SetSeatProps> = ({ isSetSeats, setIsSetSeats }) => {
                     取消
                   </button>
                   <button
-                    onClick={ submitSetSeat }
+                    onClick={submitSetSeat}
                     className={`bg-[#3A57E8] py-[5px] px-[16px] rounded-[2px] text-[#fff]`}
                   >
                     確認

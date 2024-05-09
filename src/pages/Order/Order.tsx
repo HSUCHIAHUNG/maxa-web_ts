@@ -129,7 +129,7 @@ const Order: React.FC = () => {
   ];
 
   // 取得產品
-  const getProduct = (pageNumber, pageSize) => {
+  const getProduct = (pageNumber:number, pageSize:number) => {
     console.log(pageNumber);
     console.log(pageSize);
   };

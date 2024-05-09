@@ -13,40 +13,38 @@ import {
   DatePicker,
 } from "@arco-design/web-react";
 
-interface selectStationProps {
+interface SelectStationProps {
   className?: string;
 }
 
-const SelectStation: React.FC<selectStationProps> = ({ className }) => {
+const SelectStation: React.FC<SelectStationProps> = ({ className }) => {
   // redux(方法調用)
   const dispatch = useAppDispatch();
-  // redux(tab狀態)
+
+  // 訂車階段(起訖站、日期、時間狀態)
   const bookingStage = useSelector(
     (state: RootState) => state.order.bookingStage
   );
 
+  // 訂單資料
+  const bookingData = useSelector(
+    (state: RootState) => state.order.bookingData
+  );
+
+  console.log(bookingData);
+
+  // ticket( 單程票、來回票 )狀態
+  const ticketState = useSelector((state: RootState) => state.order.ticket);
+
   // ui kit
   const FormItem = Form.Item;
   const [form] = Form.useForm();
-  const options = [
-    {
-      label: "one",
-      value: 0,
-    },
-    {
-      label: "two",
-      value: 1,
-    },
-    {
-      label: "three",
-      value: 2,
-    },
-  ];
+  const options = ["南港高工", "南港", "南港軟體園區南站"];
 
   /** @func login表單提交 */
   const loginSubmit = (value: object) => {
     // redux(切換tab全域狀態)
-    dispatch(orderActions.switchTab("selectTime"));
+    dispatch(orderActions.switchStage("selectTime"));
     dispatch(orderActions.setStationData(["stationData", value]));
   };
 
@@ -63,24 +61,69 @@ const SelectStation: React.FC<selectStationProps> = ({ className }) => {
       className={` ${className}`}
     >
       <div className={`md:flex md:gap-[20px] md:w-[420px] `}>
-        <FormItem label="選擇起點" field="startStation" required>
-          <Select placeholder="選擇起點" options={options} allowClear />
+        <FormItem
+          label="選擇起點"
+          field="startStation"
+          disabled = {bookingStage !== "selectStation"}
+          required
+          rules={[{ required: true, message: "必填" }]}
+        >
+          <Select
+            placeholder="選擇起點"
+            options={options}
+            allowClear
+          />
         </FormItem>
-        <FormItem label="選擇迄點" field="endStation" required>
+        <FormItem
+          label="選擇迄點"
+          field="endStation"
+          disabled = {bookingStage !== "selectStation"}
+          required
+          dependencies={["startStation"]}
+          rules={[
+            {
+              required: true,
+              validator: (v, cb) => {
+                console.log(v, form.getFieldValue("startStation"));
+                if (v === undefined) {
+                  return cb("必填");
+                }
+                if (form.getFieldValue("startStation") === v) {
+                  return cb("起訖點不可相同");
+                }
+                cb(null);
+              },
+            },
+          ]}
+        >
           <Select placeholder="選擇迄點" options={options} allowClear />
         </FormItem>
       </div>
-      <div className={`md:flex md:gap-[20px] md:w-[420px]`}>
+      <div className={`md:flex md:gap-[20px] md:w-[420px] `}>
         <FormItem
           label="去程日期"
           field="startDate"
-          rules={[{ required: true }]}
+          disabled = {bookingStage !== "selectStation"}
+          rules={[{ required: true, message: "必填" }]}
+          className={`${ticketState === "oneWayTicket" && "md:w-[200px]"} `}
         >
           <DatePicker placeholder="選擇去程日期" className={`w-full`} />
         </FormItem>
-        <FormItem label="回程日期" field="endDate" rules={[{ required: true }]}>
-          <DatePicker placeholder="選擇回程日期" className={`w-full`} />
-        </FormItem>
+        {ticketState === "roundTripTicket" && (
+          <FormItem
+            label="回程日期"
+            field="endDate"
+            disabled = {bookingStage !== "selectStation"}
+            rules={[
+              {
+                message: "必填",
+                required: true,
+              },
+            ]}
+          >
+            <DatePicker placeholder="選擇回程日期" className={`w-full`} />
+          </FormItem>
+        )}
       </div>
 
       <Divider

@@ -1,11 +1,12 @@
 // react原生方法
-import React from "react";
+import React, { useState } from "react";
 // redux
 import { useSelector } from "react-redux";
 import { orderActions } from "../../stores/order";
 import { RootState, useAppDispatch } from "../../stores/index";
 // ui kit
 import {
+  Alert,
   Button,
   Divider,
   Form,
@@ -94,12 +95,20 @@ const data = [
 ];
 
 const SelectTime: React.FC<SelectTimeProps> = () => {
+  // 訂車時間選擇狀態
+  const [timeIsSelect, setTimeIsSelect] = useState(false);
+
+  // ticket( 單程票、來回票 )狀態
+  const ticketState = useSelector((state: RootState) => state.order.ticket);
+
   // redux(方法調用)
   const dispatch = useAppDispatch();
-  // redux(tab狀態)
+
+  // 訂車階段(起訖站、日期、時間狀態))
   const bookingStage = useSelector(
     (state: RootState) => state.order.bookingStage
   );
+
   // redux(訂票資訊)
   const bookingData = useSelector(
     (state: RootState) => state.order.bookingData
@@ -110,14 +119,33 @@ const SelectTime: React.FC<SelectTimeProps> = () => {
   const [form] = Form.useForm();
 
   /** @func login表單提交 */
-  const loginSubmit = (value: object) => {
-    console.log(value);
-    // redux(切換tab全域狀態)
-    dispatch(orderActions.switchTab("selectSeats"));
+  const loginSubmit = () => {
+    console.log(bookingData);
+    console.log(Object.keys(bookingData.timeData).length);
+    if (ticketState === "oneWayTicket") {
+      if (Object.keys(bookingData.timeData).length === 0) {
+        setTimeIsSelect(Object.keys(bookingData.timeData).length === 0);
+      } else {
+        setTimeIsSelect(false);
+        // redux(切換全域訂單階段)
+        dispatch(orderActions.switchStage("selectSeats"));
+      }
+    }
+
+    if (ticketState === "roundTripTicket") {
+      if (Object.keys(bookingData.timeData).length < 2) {
+        setTimeIsSelect(Object.keys(bookingData.timeData).length < 2);
+      } else {
+        setTimeIsSelect(false);
+        // redux(切換全域訂單階段)
+        dispatch(orderActions.switchStage("selectSeats"));
+      }
+    }
   };
 
   // 控制訂車階段顯示
   const isOpen = () => (bookingStage !== "selectTime" ? "hidden" : "block");
+
   // 劃位階段顯示
   const selectSeatIsOpen = () =>
     bookingStage !== "selectSeats" ? "hidden" : "block";
@@ -136,7 +164,8 @@ const SelectTime: React.FC<SelectTimeProps> = () => {
 
   return (
     <>
-      {isOpen() === "block" && (
+      <div className={`${isOpen()}`}>
+        {timeIsSelect && <Alert banner type="error" content="請選擇搭車時間" />}
         <Form
           form={form}
           autoComplete="on"
@@ -164,30 +193,32 @@ const SelectTime: React.FC<SelectTimeProps> = () => {
                 }}
               />
             </FormItem>
-            <FormItem label="選擇回程班次" field="endTime" required>
-              <Table
-                scroll={{
-                  x: 630,
-                }}
-                rowKey="id"
-                columns={columns}
-                data={data}
-                pagination={false}
-                hover
-                className={`w-full`}
-                rowSelection={{
-                  type: "radio",
-                  onChange: (selectedRowKeys, selectedRows) =>
-                    setSelectData(selectedRowKeys, selectedRows, "endTime"),
-                }}
-              />
-            </FormItem>
+            {ticketState === "roundTripTicket" && (
+              <FormItem label="選擇回程班次" field="endTime" required>
+                <Table
+                  scroll={{
+                    x: 630,
+                  }}
+                  rowKey="id"
+                  columns={columns}
+                  data={data}
+                  pagination={false}
+                  hover
+                  className={`w-full`}
+                  rowSelection={{
+                    type: "radio",
+                    onChange: (selectedRowKeys, selectedRows) =>
+                      setSelectData(selectedRowKeys, selectedRows, "endTime"),
+                  }}
+                />
+              </FormItem>
+            )}
           </div>
           <div className={`flex flex-col gap-[8px] md:flex-row`}>
             <FormItem className={`m-0 md:w-[180px]`}>
               <Button
                 onClick={() =>
-                  dispatch(orderActions.switchTab("selectStation"))
+                  dispatch(orderActions.switchStage("selectStation"))
                 }
                 className={`w-[100%] !text-[#4E5969] !bg-[#F2F3F5] !m-0`}
                 type="primary"
@@ -207,7 +238,7 @@ const SelectTime: React.FC<SelectTimeProps> = () => {
             </FormItem>
           </div>
         </Form>
-      )}
+      </div>
       {/* 畫位階段顯示已選擇車次列表 */}
       {selectSeatIsOpen() === "block" && (
         <div>
@@ -230,19 +261,21 @@ const SelectTime: React.FC<SelectTimeProps> = () => {
               className={`w-full`}
             />
           </div>
-          <div>
-            <p className={`text-[#4E5969] pb-[8px]`}>回程班次</p>
-            <Table
-              scroll={{
-                x: 630,
-              }}
-              columns={columns}
-              data={[bookingData.timeData.endTime]}
-              rowKey="id"
-              pagination={false}
-              className={`w-full`}
-            />
-          </div>
+          {ticketState === "roundTripTicket" && (
+            <div>
+              <p className={`text-[#4E5969] pb-[8px]`}>回程班次</p>
+              <Table
+                scroll={{
+                  x: 630,
+                }}
+                columns={columns}
+                data={[bookingData.timeData.endTime]}
+                rowKey="id"
+                pagination={false}
+                className={`w-full`}
+              />
+            </div>
+          )}
           <Divider
             style={{
               borderBottomStyle: "dashed",

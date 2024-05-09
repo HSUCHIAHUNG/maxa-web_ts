@@ -1,10 +1,11 @@
 // react原生方法
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 // redux
 import { useSelector } from "react-redux";
-// import { orderActions } from "../../stores/order";
-import { RootState } from "../../stores/index";
+
+import { orderActions } from "../../stores/order";
+import { RootState, useAppDispatch } from "../../stores/index";
 // 匯入組件
 import Banner from "../../components/Carousel";
 import ColorButton from "../../components/common/ColorButton";
@@ -12,7 +13,7 @@ import SelectStation from "../../components/Order/SelectStation";
 import SelectTime from "../../components/Order/SelectTime";
 import SelectSeats from "../../components/Order/SelectSeats";
 // 匯入樣式
-import '../../assets/ProductDetail.css'
+import "../../assets/ProductDetail.css";
 // ui kit
 import { Breadcrumb } from "@arco-design/web-react";
 import { Carousel } from "@arco-design/web-react";
@@ -22,16 +23,22 @@ import { Tabs, Typography } from "@arco-design/web-react";
 
 const ProductDetail: React.FC = () => {
   // redux(方法調用)
-  // const dispatch = useAppDispatch();
-  // redux(切換tab全域狀態)
-  // const switchTab = (tab: string) => {
-  //   dispatch(orderActions.switchTab(tab));
-  // };
-  // redux(tab狀態)
-  const bookingStage = useSelector(
-    (state: RootState) => state.order.bookingStage
-  );
-  console.log(bookingStage);
+  const dispatch = useAppDispatch();
+
+  // ticket( 單程票、來回票 )狀態
+  const ticketState = useSelector((state: RootState) => state.order.ticket);
+
+  // 初始化訂購流程狀態
+  useEffect(() => {
+    dispatch(orderActions.reseBbookingData());
+  },[]);
+
+  // (單程票、來回票)切換狀態
+  const switchTab = () => {
+    dispatch(orderActions.switchTab());
+    dispatch(orderActions.reseBbookingData());
+  };
+
   // ui kit
   const BreadcrumbItem = Breadcrumb.Item;
   const TabPane = Tabs.TabPane;
@@ -227,21 +234,33 @@ const ProductDetail: React.FC = () => {
           <p className={`text-[16px] md:text-[20px]`}>選擇日期與票數</p>
         </div>
         <Tabs
-          defaultActiveTab="1"
+          defaultActiveTab={ticketState}
           type="card-gutter"
+          onChange={switchTab}
         >
-          <TabPane key="1" title="單程票">
-            <Typography.Paragraph>Content of Tab Panel 1</Typography.Paragraph>
+          <TabPane key="oneWayTicket" title="單程票">
+            {ticketState === "oneWayTicket" && (
+              <Typography.Paragraph>
+                {/* 1. 選擇站點、日期 */}
+                <SelectStation></SelectStation>
+                {/* 2. 選擇去回程時間 */}
+                <SelectTime></SelectTime>
+                {/* 3. 選擇座位 */}
+                <SelectSeats></SelectSeats>
+              </Typography.Paragraph>
+            )}
           </TabPane>
-          <TabPane key="2" title="來回票" >
-            <Typography.Paragraph>
-              {/* 1. 選擇站點、日期 */}
-              <SelectStation></SelectStation>
-              {/* 2. 選擇去回程時間 */}
-              <SelectTime></SelectTime>
-              {/* 3. 選擇座位 */}
-              <SelectSeats></SelectSeats>
-            </Typography.Paragraph>
+          <TabPane key="roundTripTicket" title="來回票">
+            {ticketState === "roundTripTicket" && (
+              <Typography.Paragraph>
+                {/* 1. 選擇站點、日期 */}
+                <SelectStation></SelectStation>
+                {/* 2. 選擇去回程時間 */}
+                <SelectTime></SelectTime>
+                {/* 3. 選擇座位 */}
+                <SelectSeats></SelectSeats>
+              </Typography.Paragraph>
+            )}
           </TabPane>
         </Tabs>
 

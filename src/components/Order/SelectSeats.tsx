@@ -1,7 +1,7 @@
 // react原生方法
 import React, { useState } from "react";
 // router
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 // redux
 import { useSelector } from "react-redux";
 import { orderActions } from "../../stores/order";
@@ -20,24 +20,29 @@ import SetSeat from "./SetSeat";
 const SelectSeats: React.FC = () => {
   // redux(方法調用)
   const dispatch = useAppDispatch();
-  // redux(tab狀態)
+
+  // ticket( 單程票、來回票 )狀態
+  const ticketState = useSelector((state: RootState) => state.order.ticket);
+
+  // 訂車階段(起訖站、日期、時間狀態)
   const bookingStage = useSelector(
     (state: RootState) => state.order.bookingStage
   );
 
   // 動態路由切換
-  const navigate  = useNavigate ();
+  const navigate = useNavigate();
 
-  // 手動劃位 
-  const [ isSetSeats, setIsSetSeats ] = useState(false);
+  // 手動劃位
+  const [isSetSeats, setIsSetSeats] = useState(false);
 
   // ui kit
   const FormItem = Form.Item;
   const [form] = Form.useForm();
 
   /** @func login表單提交 */
-  const loginSubmit = (value: object) => {
+  const submit = (value: object) => {
     console.log(value);
+    navigate("/contract");
   };
 
   // 控制訂車階段顯示
@@ -47,38 +52,65 @@ const SelectSeats: React.FC = () => {
   const seatHandler = (
     _checked: boolean,
     event: React.ChangeEvent<Element>
-) => {
-    if ((event.target as HTMLInputElement).defaultValue === "手動劃位") setIsSetSeats(!isSetSeats);
-};
+  ) => {
+    if ((event.target as HTMLInputElement).defaultValue === "手動劃位")
+      setIsSetSeats(!isSetSeats);
+  };
 
-
-  // 確定購買送出訂單
-  function submitSelectSeats () {
-    navigate('/contract')
+  // 儲存票數票種( 成人、兒童、敬老 )
+  function storePassengerTicket(adult: number, child: number, old: number) {
+    dispatch(orderActions.setSeatsData({
+      passengerTicket: [
+        { adult: adult },
+        { child: child },
+        { old: old }
+      ],
+      selectSeats: state.bookingData.selectSeats // 如果需要傳遞其他屬性，可以從 state 中獲取
+    }));
   }
-
   return (
     <>
       {isOpen() === "block" && (
         <>
-          {isSetSeats && <SetSeat isSetSeats={isSetSeats} setIsSetSeats={setIsSetSeats}></SetSeat>}
+          {/* 手動劃位 */}
+          {isSetSeats && (
+            <SetSeat
+              isSetSeats={isSetSeats}
+              setIsSetSeats={setIsSetSeats}
+            ></SetSeat>
+          )}
           <Form
             form={form}
             autoComplete="on"
             requiredSymbol={{ position: "start" }}
             layout="vertical"
-            onSubmit={loginSubmit}
+            onSubmit={submit}
           >
             <FormItem
               label="成人票數"
               field="aldult"
               required
+              rules={[
+                {
+                  required: true,
+                  validator: (v, cb) => {
+                    if (v === undefined) {
+                      return cb("必填");
+                    }
+                    if (v < 1) {
+                      return cb("不可小於1");
+                    }
+                    cb(null);
+                  },
+                },
+              ]}
               className={`m-0 md:w-[180px]`}
             >
               <InputNumber
+                onChange={(value) => storePassengerTicket(value, 'adult')}
                 mode="button"
                 defaultValue={0}
-                max={20}
+                max={10}
                 className={`!w-full md:w-[200px]`}
                 style={{ width: 160, margin: "10px 24px 10px 0" }}
               />
@@ -97,7 +129,7 @@ const SelectSeats: React.FC = () => {
               <InputNumber
                 mode="button"
                 defaultValue={0}
-                max={20}
+                max={10}
                 className={`!w-full md:w-[200px]`}
                 style={{ width: 160, margin: "10px 24px 10px 0" }}
               />
@@ -117,63 +149,134 @@ const SelectSeats: React.FC = () => {
                 style={{ width: 160, margin: "10px 24px 10px 0" }}
               />
             </FormItem>
-            <Radio.Group
-              name="card-radio-group"
-              className={`flex flex-col gap-[8px] md:flex-row`}
-            >
-              {["系統自動劃位", "手動劃位"].map((item) => {
-                return (
-                  <Radio
-                    onChange={(_checked, event) => seatHandler(_checked, event)}
-                    key={item}
-                    value={item}
-                    className={`w-full !m-0 p-0`}
-                  >
-                    {({ checked }) => {
-                      return (
-                        <Space
-                          align="start"
-                          className={` flex items-center justify-between custom-radio-card ${
-                            checked ? "custom-radio-card-checked" : ""
-                          }`}
-                        >
-                          <div className={`flex items-center gap-[8px]`}>
-                            <div className="custom-radio-card-mask">
-                              <div className="custom-radio-card-mask-dot"></div>
-                            </div>
-                            {item === "系統自動劃位" && (
-                              <div className="custom-radio-card-title h-[44px] leading-[48px] ">
-                                系統自動劃位
+            {/* 選擇去程座位 */}
+            <FormItem label="選擇去程座位" required>
+              <Radio.Group
+                name="card-radio-group"
+                defaultValue="系統自動劃位"
+                className={`flex flex-col gap-[8px] md:flex-row`}
+              >
+                {["系統自動劃位", "手動劃位"].map((item) => {
+                  return (
+                    <Radio
+                      onChange={(_checked, event) =>
+                        seatHandler(_checked, event)
+                      }
+                      key={item}
+                      value={item}
+                      className={`w-full !m-0 p-0`}
+                    >
+                      {({ checked }) => {
+                        return (
+                          <Space
+                            align="start"
+                            className={` flex items-center justify-between custom-radio-card ${
+                              checked ? "custom-radio-card-checked" : ""
+                            }`}
+                          >
+                            <div className={`flex items-center gap-[8px]`}>
+                              <div className="custom-radio-card-mask">
+                                <div className="custom-radio-card-mask-dot"></div>
                               </div>
-                            )}
-                            {item === "手動劃位" && (
-                              <div
-                                className={`flex items-center justify-between`}
-                              >
-                                <div>
-                                  <div className="custom-radio-card-title">
-                                    手動劃位
-                                  </div>
-                                  <Typography.Text
-                                    type="secondary"
-                                    className={`flex items-center  `}
-                                  >
-                                    <p>點選以選取座位</p>
-                                  </Typography.Text>
+                              {item === "系統自動劃位" && (
+                                <div className="custom-radio-card-title h-[44px] leading-[48px] ">
+                                  系統自動劃位
                                 </div>
-                              </div>
+                              )}
+                              {item === "手動劃位" && (
+                                <div
+                                  className={`flex items-center justify-between`}
+                                >
+                                  <div>
+                                    <div className="custom-radio-card-title">
+                                      手動劃位
+                                    </div>
+                                    <Typography.Text
+                                      type="secondary"
+                                      className={`flex items-center  `}
+                                    >
+                                      <p>點選以選取座位</p>
+                                    </Typography.Text>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            {item === "手動劃位" && (
+                              <span className="icon-[solar--arrow-right-line-duotone] w-[32px] h-[32px] text-[#4E5969] "></span>
                             )}
-                          </div>
-                          {item === "手動劃位" && (
-                            <span className="icon-[solar--arrow-right-line-duotone] w-[32px] h-[32px] text-[#4E5969] "></span>
-                          )}
-                        </Space>
-                      );
-                    }}
-                  </Radio>
-                );
-              })}
-            </Radio.Group>
+                          </Space>
+                        );
+                      }}
+                    </Radio>
+                  );
+                })}
+              </Radio.Group>
+            </FormItem>
+            {/* 選擇回程座位 */}
+            {ticketState === "roundTripTicket" && (
+              <FormItem label="選擇回程座位" required>
+                <Radio.Group
+                  name="card-radio-group"
+                  defaultValue="系統自動劃位"
+                  className={`flex flex-col gap-[8px] md:flex-row`}
+                >
+                  {["系統自動劃位", "手動劃位"].map((item) => {
+                    return (
+                      <Radio
+                        onChange={(_checked, event) =>
+                          seatHandler(_checked, event)
+                        }
+                        key={item}
+                        value={item}
+                        className={`w-full !m-0 p-0`}
+                      >
+                        {({ checked }) => {
+                          return (
+                            <Space
+                              align="start"
+                              className={` flex items-center justify-between custom-radio-card ${
+                                checked ? "custom-radio-card-checked" : ""
+                              }`}
+                            >
+                              <div className={`flex items-center gap-[8px]`}>
+                                <div className="custom-radio-card-mask">
+                                  <div className="custom-radio-card-mask-dot"></div>
+                                </div>
+                                {item === "系統自動劃位" && (
+                                  <div className="custom-radio-card-title h-[44px] leading-[48px] ">
+                                    系統自動劃位
+                                  </div>
+                                )}
+                                {item === "手動劃位" && (
+                                  <div
+                                    className={`flex items-center justify-between`}
+                                  >
+                                    <div>
+                                      <div className="custom-radio-card-title">
+                                        手動劃位
+                                      </div>
+                                      <Typography.Text
+                                        type="secondary"
+                                        className={`flex items-center  `}
+                                      >
+                                        <p>點選以選取座位</p>
+                                      </Typography.Text>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                              {item === "手動劃位" && (
+                                <span className="icon-[solar--arrow-right-line-duotone] w-[32px] h-[32px] text-[#4E5969] "></span>
+                              )}
+                            </Space>
+                          );
+                        }}
+                      </Radio>
+                    );
+                  })}
+                </Radio.Group>
+              </FormItem>
+            )}
             <div className={`flex justify-between w-full pt-[16px]`}>
               <div className={`text-[12px] md:text-[13px] text-[#86909C]`}>
                 <p>商品最小購買數量：1</p>
@@ -195,7 +298,9 @@ const SelectSeats: React.FC = () => {
             <div className={`flex flex-col gap-[8px] pt-[8px] md:flex-row`}>
               <FormItem className={`m-0 md:w-[180px]`}>
                 <Button
-                  onClick={() => dispatch(orderActions.switchTab("selectTime"))}
+                  onClick={() =>
+                    dispatch(orderActions.switchStage("selectTime"))
+                  }
                   className={`w-[100%] !text-[#4E5969] !bg-[#F2F3F5] !m-0`}
                   type="primary"
                   htmlType="button"
@@ -214,7 +319,6 @@ const SelectSeats: React.FC = () => {
               </FormItem>
               <FormItem className={`m-0`}>
                 <Button
-                  onClick={submitSelectSeats}
                   className={`w-[100%] !bg-[#3A57E8] !m-0`}
                   type="primary"
                   htmlType="submit"
